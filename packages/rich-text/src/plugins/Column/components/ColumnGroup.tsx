@@ -62,7 +62,6 @@ const useRemoveNodeButton = ({ element }) => {
       },
       onClick: () => {
         const path = findNodePath(editor, element);
-        console.log(path);
         removeNodes(editor, { at: path });
       },
     },

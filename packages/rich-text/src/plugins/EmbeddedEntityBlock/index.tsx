@@ -16,12 +16,17 @@ const createEmbeddedEntityPlugin =
     key: nodeType,
     type: nodeType,
     isElement: true,
-    isVoid: true,
+    // isVoid: true,
+    // isMarkableVoid: true,
     component: LinkedEntityBlock,
     options: { hotkey },
     handlers: {
       onKeyDown: getWithEmbeddedBlockEvents(nodeType, sdk),
     },
+    normalizer: [{
+      // Only allow Paragraphs
+      validChildren: [BLOCKS.PARAGRAPH],
+    }],
     deserializeHtml: {
       rules: [
         {

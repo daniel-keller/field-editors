@@ -23,6 +23,8 @@ import {
   select,
   KeyboardHandler,
   removeNodes,
+  getChildren,
+  NodeEntry,
 } from '../../internal';
 import { TEXT_CONTAINERS, BLOCKS } from '../../rich-text-types/src';
 import { TrackingPluginActions } from '../Tracking';
@@ -33,13 +35,14 @@ export function getWithEmbeddedBlockEvents(
 ): KeyboardHandler<HotkeyPlugin> {
   return (editor, { options: { hotkey } }) =>
     (event) => {
-      const [, pathToSelectedElement] = getNodeEntryFromSelection(editor, nodeType);
+      const [element, pathToSelectedElement] = getNodeEntryFromSelection(editor, nodeType);
+      const children = getChildren([element, pathToSelectedElement] as NodeEntry);
 
       if (pathToSelectedElement) {
         const isDelete = event.key === 'Delete';
         const isBackspace = event.key === 'Backspace';
 
-        if (isDelete || isBackspace) {
+        if ((isDelete || isBackspace) && children.length <= 0) {
           event.preventDefault();
           removeNodes(editor, { at: pathToSelectedElement });
         }
