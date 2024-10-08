@@ -1,11 +1,11 @@
 import * as React from 'react';
 
 import { CodeIcon } from '@contentful/f36-icons';
-import { MARKS } from '@contentful/rich-text-types';
 import { createCodePlugin as createDefaultCodePlugin } from '@udecode/plate-basic-marks';
 import { css } from 'emotion';
 
 import { PlatePlugin, RenderLeafProps } from '../../internal/types';
+import { MARKS } from '../../rich-text-types/src';
 import { createMarkToolbarButton } from './components/MarkToolbarButton';
 import { buildMarkEventHandler } from './helpers';
 

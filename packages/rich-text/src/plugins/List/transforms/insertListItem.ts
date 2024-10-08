@@ -1,4 +1,3 @@
-import { BLOCKS, TEXT_CONTAINERS } from '@contentful/rich-text-types';
 
 import { withoutNormalizing } from '../../../internal';
 import {
@@ -18,6 +17,7 @@ import {
   collapseSelection,
 } from '../../../internal/transforms';
 import { Element, PlateEditor } from '../../../internal/types';
+import { BLOCKS, TEXT_CONTAINERS } from '../../../rich-text-types/src';
 
 /**
  * Build a new list item node while preserving marks

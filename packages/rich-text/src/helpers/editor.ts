@@ -1,5 +1,5 @@
 import { Link } from '@contentful/field-editor-reference';
-import { BLOCKS, INLINES } from '@contentful/rich-text-types';
+
 
 import { focusEditor } from '../internal/misc';
 import {
@@ -28,6 +28,7 @@ import {
 } from '../internal/transforms';
 import { EditorNodesOptions, ToggleNodeTypeOptions, Node, Path } from '../internal/types';
 import { Element, PlateEditor } from '../internal/types';
+import { BLOCKS, INLINES } from '../rich-text-types/src';
 import { IS_SAFARI } from './environment';
 
 export const LINK_TYPES: INLINES[] = [
@@ -142,6 +143,14 @@ interface InsertLinkOptions {
   url?: string;
   target?: Link;
   path?: Path;
+  title?: string;
+  openTab?: boolean;
+  isButton?: boolean;
+  size?: string;
+  variant?: string;
+  color?: string;
+  trailingIcon?: string;
+  leadingIcon?: string;
 }
 
 // TODO: move to hyperlink plugin
@@ -175,7 +184,24 @@ export function unwrapLink(editor) {
 }
 
 // TODO: move to hyperlink plugin
-export function wrapLink(editor, { text, url, target, type, path }: InsertLinkOptions) {
+export function wrapLink(
+  editor,
+  {
+    text,
+    url,
+    target,
+    type,
+    path,
+    title,
+    openTab,
+    isButton,
+    size,
+    variant,
+    color,
+    trailingIcon,
+    leadingIcon,
+  }: InsertLinkOptions
+) {
   if (isLinkActive(editor) && !path) {
     unwrapLink(editor);
   }
@@ -194,6 +220,18 @@ export function wrapLink(editor, { text, url, target, type, path }: InsertLinkOp
 
   if (target) {
     link.data = { target };
+  }
+
+  if (title) link.data = { ...link.data, title };
+  if (openTab) link.data = { ...link.data, openTab };
+
+  if (isButton) {
+    link.data = { ...link.data, isButton };
+    if (size) link.data = { ...link.data, size };
+    if (variant) link.data = { ...link.data, variant };
+    if (color) link.data = { ...link.data, color };
+    if (trailingIcon) link.data = { ...link.data, trailingIcon };
+    if (leadingIcon) link.data = { ...link.data, leadingIcon };
   }
 
   // TODO: always set the selection to the end of the inserted link

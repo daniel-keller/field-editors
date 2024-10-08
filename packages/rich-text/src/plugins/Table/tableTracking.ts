@@ -1,8 +1,8 @@
-import { BLOCKS } from '@contentful/rich-text-types';
 
 import { isElement } from '../../internal/queries';
 import { Node, PlateEditor } from '../../internal/types';
 import { getPastingSource } from '../../plugins/Tracking';
+import { BLOCKS } from '../../rich-text-types/src';
 import type { NodeTransformer } from '../Normalizer';
 
 function hasTables(nodes: Node[]) {

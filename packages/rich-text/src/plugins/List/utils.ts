@@ -1,4 +1,3 @@
-import { BLOCKS } from '@contentful/rich-text-types';
 
 import {
   isText,
@@ -12,6 +11,7 @@ import {
 } from '../../internal/queries';
 import { insertNodes, removeNodes, wrapNodes } from '../../internal/transforms';
 import { Node, NodeEntry, PlateEditor, Path, Element } from '../../internal/types';
+import { BLOCKS } from '../../rich-text-types/src';
 
 const isList = (node: Node) => [BLOCKS.OL_LIST, BLOCKS.UL_LIST].includes(node.type as BLOCKS);
 

@@ -1,18 +1,23 @@
 import * as React from 'react';
 
 import tokens from '@contentful/f36-tokens';
-import { EntryLink, ResourceLink } from '@contentful/field-editor-reference';
+import { EntityLink, ResourceLink } from '@contentful/field-editor-reference';
 import { css } from 'emotion';
 
 import { IS_CHROME } from '../../helpers/environment';
 import { RenderElementProps } from '../../internal/types';
 import { getLinkEntityId } from './utils';
 
+type LinkedInlineWrapperProps = React.PropsWithChildren<{
+  attributes: Pick<RenderElementProps, 'attributes'>;
+  card: JSX.Element;
+  link: ResourceLink<'Contentful:Entry'> | EntityLink;
+}>;
+
 const styles = {
   icon: css({
     marginRight: '10px',
   }),
-
   root: css({
     display: 'inline-block',
     margin: `0 ${tokens.spacing2Xs}`,
@@ -22,12 +27,6 @@ const styles = {
     },
   }),
 };
-
-type LinkedInlineWrapperProps = React.PropsWithChildren<{
-  attributes: Pick<RenderElementProps, 'attributes'>;
-  card: JSX.Element;
-  link: ResourceLink<'Contentful:Entry'> | EntryLink;
-}>;
 
 export function LinkedInlineWrapper({
   attributes,

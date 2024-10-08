@@ -1,11 +1,11 @@
 import * as React from 'react';
 
 import tokens from '@contentful/f36-tokens';
-import { TableHeaderCell } from '@contentful/rich-text-types';
 import { css } from 'emotion';
 import { useSelected } from 'slate-react';
 
 import { RenderElementProps } from '../../../internal/types';
+import { TableHeaderCell } from '../../../rich-text-types/src';
 import { TableActions } from './TableActions';
 
 const style = css`

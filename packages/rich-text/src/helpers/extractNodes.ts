@@ -1,7 +1,7 @@
-import { BLOCKS, TEXT_CONTAINERS } from '@contentful/rich-text-types';
 
 import { getNodeEntries } from '../internal/queries';
 import { PlateEditor, Node, Path, NodeMatch } from '../internal/types';
+import { BLOCKS, TEXT_CONTAINERS } from '../rich-text-types/src';
 
 function extractNodes(editor: PlateEditor, path: Path, match: NodeMatch) {
   return Array.from(

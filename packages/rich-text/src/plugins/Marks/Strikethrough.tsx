@@ -1,10 +1,10 @@
 import * as React from 'react';
 
-import { MARKS } from '@contentful/rich-text-types';
 import { createStrikethroughPlugin as createDefaultStrikethroughPlugin } from '@udecode/plate-basic-marks';
 import { css } from 'emotion';
 
 import { PlatePlugin, RenderLeafProps } from '../../internal/types';
+import { MARKS } from '../../rich-text-types/src';
 import { createMarkToolbarButton } from './components/MarkToolbarButton';
 import { buildMarkEventHandler } from './helpers';
 

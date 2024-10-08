@@ -3,10 +3,10 @@ import * as React from 'react';
 import { FieldAppSDK } from '@contentful/app-sdk';
 import { Flex, Icon, Menu } from '@contentful/f36-components';
 import { AssetIcon, EmbeddedEntryBlockIcon } from '@contentful/f36-icons';
-import { BLOCKS } from '@contentful/rich-text-types';
 import { css } from 'emotion';
 
 import { useContentfulEditor } from '../../ContentfulEditorProvider';
+import { BLOCKS } from '../../rich-text-types/src';
 import { useSdkContext } from '../../SdkProvider';
 import { selectEntityAndInsert, selectResourceEntityAndInsert } from '../shared/EmbeddedBlockUtil';
 import { ResourceNewBadge } from './ResourceNewBadge';

@@ -1,6 +1,5 @@
 import * as React from 'react';
 
-import * as Contentful from '@contentful/rich-text-types';
 import { usePlateActions } from '@udecode/plate-common';
 import equal from 'fast-deep-equal';
 
@@ -8,6 +7,7 @@ import { createOnChangeCallback } from './helpers/callbacks';
 import { usePlateSelectors } from './internal/hooks';
 import { setEditorValue } from './internal/transforms';
 import { PlateEditor, Value } from './internal/types';
+import * as Contentful from './rich-text-types/src';
 
 /**
  * A hook responsible for keeping the editor state in sync with incoming

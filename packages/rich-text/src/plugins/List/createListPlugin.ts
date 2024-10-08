@@ -1,4 +1,3 @@
-import { BLOCKS, LIST_ITEM_BLOCKS } from '@contentful/rich-text-types';
 import {
   createListPlugin as createPlateListPlugin,
   ELEMENT_LI,
@@ -9,6 +8,7 @@ import {
 
 import { transformParagraphs, transformWrapIn } from '../../helpers/transformers';
 import { PlatePlugin, PlateEditor, Value } from '../../internal/types';
+import { BLOCKS, LIST_ITEM_BLOCKS } from '../../rich-text-types/src';
 import { ListOL, ListUL } from './components/List';
 import { ListItem } from './components/ListItem';
 import { onKeyDownList } from './onKeyDownList';

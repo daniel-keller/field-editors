@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 
-import { BLOCKS, INLINES } from '@contentful/rich-text-types';
 
 import { useContentfulEditor } from '../../ContentfulEditorProvider';
 import { isLinkActive } from '../../helpers/editor';
 import { isNodeTypeEnabled } from '../../helpers/validations';
 import { EmbeddedBlockToolbarIcon } from '../../plugins/shared/EmbeddedBlockToolbarIcon';
 import { EmbeddedInlineToolbarIcon } from '../../plugins/shared/EmbeddedInlineToolbarIcon';
+import { BLOCKS, INLINES } from '../../rich-text-types/src';
 import { useSdkContext } from '../../SdkProvider';
 import { EmbeddedEntityDropdownButton } from './EmbeddedEntityDropdownButton';
 
@@ -23,6 +23,7 @@ export const EmbedEntityWidget = ({ isDisabled, canInsertBlocks }: EmbedEntityWi
   const onCloseEntityDropdown = () => setEmbedDropdownOpen(false);
   const onToggleEntityDropdown = () => setEmbedDropdownOpen(!isEmbedDropdownOpen);
 
+  const inlineAssetEmbedEnabled = isNodeTypeEnabled(sdk.field, INLINES.EMBEDDED_ASSET);
   const inlineEntryEmbedEnabled = isNodeTypeEnabled(sdk.field, INLINES.EMBEDDED_ENTRY);
   const inlineResourceEmbedEnabled = isNodeTypeEnabled(sdk.field, INLINES.EMBEDDED_RESOURCE);
   const blockEntryEmbedEnabled =
@@ -71,6 +72,13 @@ export const EmbedEntityWidget = ({ isDisabled, canInsertBlocks }: EmbedEntityWi
           onClose={onCloseEntityDropdown}
         />
       )}
+      {inlineAssetEmbedEnabled && (
+        <EmbeddedInlineToolbarIcon
+          nodeType={INLINES.EMBEDDED_ASSET}
+          isDisabled={!!isDisabled || isLinkActive(editor)}
+          onClose={onCloseEntityDropdown}
+        />
+      )}
     </>
   );
 
@@ -79,7 +87,8 @@ export const EmbedEntityWidget = ({ isDisabled, canInsertBlocks }: EmbedEntityWi
     blockResourceEmbedEnabled ||
     inlineEntryEmbedEnabled ||
     inlineResourceEmbedEnabled ||
-    blockAssetEmbedEnabled;
+    blockAssetEmbedEnabled ||
+    inlineAssetEmbedEnabled;
 
   return showEmbedButton ? (
     <EmbeddedEntityDropdownButton

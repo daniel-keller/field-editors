@@ -1,4 +1,3 @@
-import { BLOCKS } from '@contentful/rich-text-types';
 import {
   ELEMENT_TABLE,
   ELEMENT_TH,
@@ -23,6 +22,7 @@ import {
 } from '../../internal/queries';
 import { insertNodes, removeNodes, moveNodes } from '../../internal/transforms';
 import { PlateEditor, NodeEntry, Ancestor, Node } from '../../internal/types';
+import { BLOCKS } from '../../rich-text-types/src';
 
 export function insertTableAndFocusFirstCell(editor: PlateEditor): void {
   const table = {

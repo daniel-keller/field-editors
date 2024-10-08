@@ -1,7 +1,7 @@
-import { BLOCKS, CONTAINERS } from '@contentful/rich-text-types';
 
 import { transformLift, transformUnwrap } from '../../helpers/transformers';
 import { PlatePlugin } from '../../internal/types';
+import { BLOCKS, CONTAINERS } from '../../rich-text-types/src';
 import { Quote } from './components/Quote';
 import { shouldResetQuoteOnBackspace } from './shouldResetQuote';
 import { onKeyDownToggleQuote, toggleQuote } from './toggleQuote';

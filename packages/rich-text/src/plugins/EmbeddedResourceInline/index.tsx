@@ -1,7 +1,7 @@
 import { FieldAppSDK } from '@contentful/app-sdk';
-import { INLINES } from '@contentful/rich-text-types';
 
 import { PlatePlugin } from '../../internal';
+import { INLINES } from '../../rich-text-types/src';
 import { getWithEmbeddedEntryInlineEvents } from '../shared/EmbeddedInlineUtil';
 import { LinkedResourceInline } from './LinkedResourceInline';
 

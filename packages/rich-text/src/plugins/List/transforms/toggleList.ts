@@ -2,7 +2,6 @@
  * Credit: Modified version of Plate's list plugin
  * See: https://github.com/udecode/plate/blob/main/packages/nodes/list
  */
-import { BLOCKS } from '@contentful/rich-text-types';
 import { ELEMENT_LIC } from '@udecode/plate-list';
 import { getListItemEntry } from '@udecode/plate-list';
 
@@ -22,6 +21,7 @@ import {
 } from '../../../internal/queries';
 import { setNodes, wrapNodes } from '../../../internal/transforms';
 import { PlateEditor, Element, Location, NodeEntry } from '../../../internal/types';
+import { BLOCKS } from '../../../rich-text-types/src';
 import { unwrapList } from './unwrapList';
 
 const listTypes = [BLOCKS.UL_LIST, BLOCKS.OL_LIST] as string[];

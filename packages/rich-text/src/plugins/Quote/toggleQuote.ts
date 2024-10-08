@@ -1,10 +1,10 @@
-import { BLOCKS } from '@contentful/rich-text-types';
 import isHotkey from 'is-hotkey';
 
 import { isBlockSelected } from '../../helpers/editor';
 import { withoutNormalizing, wrapNodes, unwrapNodes, isElement } from '../../internal';
 import { KeyboardHandler, HotkeyPlugin, PlateEditor } from '../../internal/types';
 import { TrackingPluginActions } from '../../plugins/Tracking';
+import { BLOCKS } from '../../rich-text-types/src';
 
 export function toggleQuote(
   editor: PlateEditor,

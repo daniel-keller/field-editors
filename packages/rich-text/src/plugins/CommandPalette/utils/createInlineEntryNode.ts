@@ -1,4 +1,4 @@
-import { INLINES } from '@contentful/rich-text-types';
+import { INLINES } from '../../../rich-text-types/src';
 
 export function createInlineEntryNode(id: string) {
   return {

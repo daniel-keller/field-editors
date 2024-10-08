@@ -1,8 +1,8 @@
-import { BLOCKS, INLINES } from '@contentful/rich-text-types';
 import { HistoryEditor } from 'slate-history';
 
 import { getNodeEntries } from '../../internal/queries';
 import { PlatePlugin } from '../../internal/types';
+import { BLOCKS, INLINES } from '../../rich-text-types/src';
 
 export function createDragAndDropPlugin(): PlatePlugin {
   const DRAGGABLE_TYPES: string[] = [
@@ -11,6 +11,7 @@ export function createDragAndDropPlugin(): PlatePlugin {
     BLOCKS.EMBEDDED_RESOURCE,
     BLOCKS.HR,
     INLINES.EMBEDDED_ENTRY,
+    INLINES.EMBEDDED_ASSET,
     INLINES.EMBEDDED_RESOURCE,
   ];
 
@@ -20,7 +21,7 @@ export function createDragAndDropPlugin(): PlatePlugin {
    * TODO: looking up for html nodes is not the best solution and it won't scale but it works fine for our current cases/elements
    */
   const ON_DROP_ALLOWED_TYPES = {
-    TABLE: [INLINES.EMBEDDED_ENTRY, INLINES.EMBEDDED_RESOURCE],
+    TABLE: [INLINES.EMBEDDED_ENTRY, INLINES.EMBEDDED_ASSET, INLINES.EMBEDDED_RESOURCE],
   };
 
   return {

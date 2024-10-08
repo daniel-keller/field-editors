@@ -1,12 +1,12 @@
 import { KeyboardEvent } from 'react';
 
-import { BLOCKS } from '@contentful/rich-text-types';
 import { getTableEntries, onKeyDownTable as defaultKeyDownTable } from '@udecode/plate-table';
 
 import { insertEmptyParagraph } from '../../helpers/editor';
 import { blurEditor } from '../../internal/misc';
 import { getAboveNode, getText, isFirstChild, isLastChildPath } from '../../internal/queries';
 import { KeyboardHandler, HotkeyPlugin, NodeEntry } from '../../internal/types';
+import { BLOCKS } from '../../rich-text-types/src';
 import { addRowBelow } from './actions';
 
 export const onKeyDownTable: KeyboardHandler<HotkeyPlugin> = (editor, plugin) => {

@@ -1,7 +1,6 @@
 /* eslint-disable cypress/no-unnecessary-waiting */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import { INLINES } from '@contentful/rich-text-types';
-
+import { INLINES } from '../../../packages/rich-text/src/rich-text-types/src';
 import { cancelFakeDialog, confirmFakeDialog } from '../../fixtures';
 
 export type EmbedType =

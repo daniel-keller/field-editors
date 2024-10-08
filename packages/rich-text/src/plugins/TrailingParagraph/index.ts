@@ -1,7 +1,7 @@
-import { BLOCKS } from '@contentful/rich-text-types';
 import { createTrailingBlockPlugin } from '@udecode/plate-trailing-block';
 
 import { PlatePlugin } from '../../internal/types';
+import { BLOCKS } from '../../rich-text-types/src';
 
 export const createTrailingParagraphPlugin = (): PlatePlugin => {
   return createTrailingBlockPlugin({

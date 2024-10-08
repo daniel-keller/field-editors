@@ -1,11 +1,12 @@
 import * as React from 'react';
 
 import { ListBulletedIcon, ListNumberedIcon } from '@contentful/f36-icons';
-import { BLOCKS } from '@contentful/rich-text-types';
+
 
 import { useContentfulEditor } from '../../../ContentfulEditorProvider';
 import { focus } from '../../../helpers/editor';
 import { isNodeTypeEnabled } from '../../../helpers/validations';
+import { BLOCKS } from '../../../rich-text-types/src';
 import { useSdkContext } from '../../../SdkProvider';
 import { ToolbarButton } from '../../shared/ToolbarButton';
 import { toggleList } from '../transforms/toggleList';

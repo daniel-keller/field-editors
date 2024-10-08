@@ -1,9 +1,9 @@
-import { BLOCKS } from '@contentful/rich-text-types';
 import { getEmptyRowNode } from '@udecode/plate-table';
 
 import { getAboveNode, someNode, getStartPoint, getNextPath } from '../../../internal/queries';
 import { select, insertNodes } from '../../../internal/transforms';
 import { PlateEditor, NodeEntry, Element, Path, Location } from '../../../internal/types';
+import { BLOCKS } from '../../../rich-text-types/src';
 
 const addRow = (editor: PlateEditor, getNextRowPath: (currentRowPath: Path) => Path) => {
   if (

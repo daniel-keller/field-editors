@@ -1,7 +1,7 @@
 /** @jsx jsx */
-import { BLOCKS } from '@contentful/rich-text-types';
 import { PlateEditor } from '@udecode/plate-common';
 
+import { BLOCKS } from '../../../rich-text-types/src';
 import { assertOutput, jsx, createTestEditor } from '../../../test-utils';
 import { toggleList } from './toggleList';
 

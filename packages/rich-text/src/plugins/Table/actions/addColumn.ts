@@ -1,9 +1,9 @@
-import { BLOCKS } from '@contentful/rich-text-types';
 import { getEmptyCellNode } from '@udecode/plate-table';
 
 import { getAboveNode, getNextPath, someNode } from '../../../internal/queries';
 import { insertNodes } from '../../../internal/transforms';
 import { PlateEditor, Path, Element, NodeEntry } from '../../../internal/types';
+import { BLOCKS } from '../../../rich-text-types/src';
 
 interface AddColumnOptions {
   header?: boolean;

@@ -1,7 +1,7 @@
-import { BLOCKS, INLINES } from '@contentful/rich-text-types';
 import { createEditor as createSlateEditor } from '@udecode/plate-test-utils';
 
 import { Element, PlateEditor, Path } from '../../internal/types';
+import { BLOCKS, INLINES } from '../../rich-text-types/src';
 import { extractParagraphs } from '../extractNodes';
 
 const createEditor = (children: Element[]) =>
@@ -205,6 +205,8 @@ describe('extractParagraphs', () => {
 
     expect(extractParagraphs(editor, path)).toEqual([paragraphWithLink, paragraph('text 2')]);
   });
+
+  test.todo('should preserve embedded inline assets');
 
   it('should preserve embedded inline entries', () => {
     const paragraphWithEmbedded = buildParagraph([

@@ -1,68 +1,74 @@
 import * as React from 'react';
 
 import tokens from '@contentful/f36-tokens';
-import { BLOCKS } from '@contentful/rich-text-types';
 import { css, cx } from 'emotion';
 import * as Slate from 'slate-react';
 
-const styles = {
-  dropdown: {
-    root: css`
-      font-weight: ${tokens.fontWeightDemiBold};
-    `,
-    [BLOCKS.PARAGRAPH]: css`
-      font-size: ${tokens.fontSizeL};
-    `,
-    [BLOCKS.HEADING_1]: css`
-      font-size: 1.625rem;
-    `,
-    [BLOCKS.HEADING_2]: css`
-      font-size: 1.4375rem;
-    `,
-    [BLOCKS.HEADING_3]: css`
-      font-size: 1.25rem;
-    `,
-    [BLOCKS.HEADING_4]: css`
-      font-size: 1.125rem;
-    `,
-    [BLOCKS.HEADING_5]: css`
-      font-size: 1rem;
-    `,
-    [BLOCKS.HEADING_6]: css`
-      font-size: 0.875rem;
-    `,
-  },
-  headings: {
-    root: css`
-      font-weight: ${tokens.fontWeightMedium};
-      line-height: 1.3;
-      margin: 0 0 ${tokens.spacingS};
-      direction: inherit;
-    `,
-    [BLOCKS.HEADING_1]: css`
-      font-size: 1.875rem;
-    `,
-    [BLOCKS.HEADING_2]: css`
-      font-size: 1.5625rem;
-    `,
-    [BLOCKS.HEADING_3]: css`
-      font-size: 1.375rem;
-    `,
-    [BLOCKS.HEADING_4]: css`
-      font-size: 1.25rem;
-    `,
-    [BLOCKS.HEADING_5]: css`
-      font-size: 1.125rem;
-    `,
-    [BLOCKS.HEADING_6]: css`
-      font-size: 1rem;
-    `,
-  },
-};
+import { BLOCKS } from '../../../rich-text-types/src';
+import { AlignValuesType } from '../../Align';
+
+interface RenderAlignableElementProps extends Slate.RenderElementProps {
+  element: Slate.RenderElementProps['element'] & { data?: { align: AlignValuesType } };
+}
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- TODO: explain this disable
 function createHeading(Tag: any, block: BLOCKS) {
-  return function Heading(props: Slate.RenderElementProps) {
+  return function Heading(props: RenderAlignableElementProps) {
+    const styles = {
+      dropdown: {
+        root: css`
+          font-weight: ${tokens.fontWeightDemiBold};
+        `,
+        [BLOCKS.PARAGRAPH]: css`
+          font-size: ${tokens.fontSizeL};
+        `,
+        [BLOCKS.HEADING_1]: css`
+          font-size: 1.625rem;
+        `,
+        [BLOCKS.HEADING_2]: css`
+          font-size: 1.4375rem;
+        `,
+        [BLOCKS.HEADING_3]: css`
+          font-size: 1.25rem;
+        `,
+        [BLOCKS.HEADING_4]: css`
+          font-size: 1.125rem;
+        `,
+        [BLOCKS.HEADING_5]: css`
+          font-size: 1rem;
+        `,
+        [BLOCKS.HEADING_6]: css`
+          font-size: 0.875rem;
+        `,
+      },
+      headings: {
+        root: css`
+          font-weight: ${tokens.fontWeightMedium};
+          line-height: 1.3;
+          margin: 0 0 ${tokens.spacingS};
+          direction: inherit;
+          text-align: ${props.element.data?.align ?? 'initial'};
+        `,
+        [BLOCKS.HEADING_1]: css`
+          font-size: 1.875rem;
+        `,
+        [BLOCKS.HEADING_2]: css`
+          font-size: 1.5625rem;
+        `,
+        [BLOCKS.HEADING_3]: css`
+          font-size: 1.375rem;
+        `,
+        [BLOCKS.HEADING_4]: css`
+          font-size: 1.25rem;
+        `,
+        [BLOCKS.HEADING_5]: css`
+          font-size: 1.125rem;
+        `,
+        [BLOCKS.HEADING_6]: css`
+          font-size: 1rem;
+        `,
+      },
+    };
     return (
       <Tag {...props.attributes} className={cx(styles.headings.root, styles.headings[block])}>
         {props.children}

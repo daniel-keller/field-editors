@@ -1,9 +1,9 @@
-import { BLOCKS } from '@contentful/rich-text-types';
 
 import { insertEmptyParagraph } from '../../helpers/editor';
 import { getText, isElement } from '../../internal/queries';
 import { Node } from '../../internal/types';
 import { Element, PlateEditor } from '../../internal/types';
+import { BLOCKS } from '../../rich-text-types/src';
 import { isTable } from './helpers';
 
 /**

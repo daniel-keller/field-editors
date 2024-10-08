@@ -2,12 +2,12 @@ import * as React from 'react';
 
 import { Menu } from '@contentful/f36-components';
 import tokens from '@contentful/f36-tokens';
-import { MARKS } from '@contentful/rich-text-types';
 import { css, cx } from 'emotion';
 
 import { useContentfulEditor } from '../../../ContentfulEditorProvider';
 import { focus } from '../../../helpers/editor';
 import { isMarkActive } from '../../../internal/queries';
+import { MARKS } from '../../../rich-text-types/src';
 import { ToolbarButton } from '../../shared/ToolbarButton';
 import { toggleMarkAndDeactivateConflictingMarks } from '../helpers';
 

@@ -1,13 +1,14 @@
 import { useState } from 'react';
 
 import { FieldAppSDK } from '@contentful/app-sdk';
-import { BLOCKS, INLINES } from '@contentful/rich-text-types';
+
 
 import { isNodeTypeSelected } from '../../helpers/editor';
 import { isNodeTypeEnabled } from '../../helpers/validations';
 import { getRange, getAboveNode } from '../../internal/queries';
 import { select, insertNodes, deleteText, removeMark } from '../../internal/transforms';
 import { PlateEditor } from '../../internal/types';
+import { BLOCKS, INLINES } from '../../rich-text-types/src';
 import { COMMAND_PROMPT } from './constants';
 import { createInlineEntryNode } from './utils/createInlineEntryNode';
 import { fetchAssets } from './utils/fetchAssets';
@@ -51,7 +52,9 @@ const removeQuery = (editor: PlateEditor) => {
 export function isCommandPromptPluginEnabled(sdk: FieldAppSDK) {
   const inlineAllowed = isNodeTypeEnabled(sdk.field, INLINES.EMBEDDED_ENTRY);
   const entriesAllowed = isNodeTypeEnabled(sdk.field, BLOCKS.EMBEDDED_ENTRY);
-  const assetsAllowed = isNodeTypeEnabled(sdk.field, BLOCKS.EMBEDDED_ASSET);
+  const assetsAllowed =
+    isNodeTypeEnabled(sdk.field, BLOCKS.EMBEDDED_ASSET) ||
+    isNodeTypeEnabled(sdk.field, INLINES.EMBEDDED_ASSET);
 
   return {
     inlineAllowed,

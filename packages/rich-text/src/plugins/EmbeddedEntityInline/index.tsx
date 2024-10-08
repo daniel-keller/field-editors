@@ -1,47 +1,59 @@
 import { FieldAppSDK } from '@contentful/app-sdk';
-import { INLINES } from '@contentful/rich-text-types';
 
-import { PlatePlugin, Node } from '../../internal/types';
+import { PlatePlugin } from '../../internal';
+import { INLINES } from '../../rich-text-types/src';
 import { getWithEmbeddedEntryInlineEvents } from '../shared/EmbeddedInlineUtil';
 import { LinkedEntityInline } from './LinkedEntityInline';
 
-export function createEmbeddedEntityInlinePlugin(sdk: FieldAppSDK): PlatePlugin {
-  const htmlAttributeName = 'data-embedded-entity-inline-id';
-  const nodeType = INLINES.EMBEDDED_ENTRY;
+const entityTypes = {
+  [INLINES.EMBEDDED_ENTRY]: 'Entry',
+  [INLINES.EMBEDDED_ASSET]: 'Asset',
+};
 
-  return {
+const createEmbeddedEntityPlugin =
+  (nodeType: INLINES.EMBEDDED_ENTRY | INLINES.EMBEDDED_ASSET, hotkey: string) =>
+  (sdk: FieldAppSDK): PlatePlugin => ({
     key: nodeType,
     type: nodeType,
     isElement: true,
     isInline: true,
     isVoid: true,
     component: LinkedEntityInline,
-    options: {
-      hotkey: 'mod+shift+2',
-    },
+    options: { hotkey },
     handlers: {
       onKeyDown: getWithEmbeddedEntryInlineEvents(nodeType, sdk),
     },
     deserializeHtml: {
       rules: [
         {
-          validAttribute: htmlAttributeName,
+          validAttribute: {
+            'data-entity-type': entityTypes[nodeType],
+          },
         },
       ],
       withoutChildren: true,
-      getNode: (el): Node => ({
+      getNode: (el) => ({
         type: nodeType,
         children: [{ text: '' }],
+        isVoid: true,
         data: {
           target: {
             sys: {
               id: el.getAttribute('data-entity-id'),
-              type: 'Link',
               linkType: el.getAttribute('data-entity-type'),
+              type: 'Link',
             },
           },
         },
       }),
     },
-  };
-}
+  });
+
+export const createEmbeddedEntryInlinePlugin = createEmbeddedEntityPlugin(
+  INLINES.EMBEDDED_ENTRY,
+  'mod+shift+2'
+);
+export const createEmbeddedAssetInlinePlugin = createEmbeddedEntityPlugin(
+  INLINES.EMBEDDED_ASSET,
+  'mod+shift+3'
+);

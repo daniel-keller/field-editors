@@ -1,9 +1,9 @@
-import { BLOCKS, TEXT_CONTAINERS } from '@contentful/rich-text-types';
 import { BaseRange, BaseSelection, Element, Point } from 'slate';
 
 import { getAboveNode, getText } from '../../internal/queries';
 import { deleteText, insertNodes } from '../../internal/transforms';
 import { WithOverride } from '../../internal/types';
+import { BLOCKS, TEXT_CONTAINERS } from '../../rich-text-types/src';
 
 export const withQuote: WithOverride = (editor) => {
   const { insertFragment } = editor;

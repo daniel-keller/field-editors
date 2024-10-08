@@ -2,7 +2,6 @@ import * as React from 'react';
 
 import { IconButton, Menu } from '@contentful/f36-components';
 import { ChevronDownIcon } from '@contentful/f36-icons';
-import { BLOCKS } from '@contentful/rich-text-types';
 import { deleteColumn, deleteRow, deleteTable } from '@udecode/plate-table';
 import { css } from 'emotion';
 
@@ -13,6 +12,7 @@ import { useReadOnly } from '../../../internal/hooks';
 import { getAboveNode } from '../../../internal/queries';
 import { PlateEditor } from '../../../internal/types';
 import { RichTextTrackingActionName } from '../../../plugins/Tracking';
+import { BLOCKS } from '../../../rich-text-types/src';
 import { addColumnLeft, addColumnRight, addRowAbove, addRowBelow, setHeader } from '../actions';
 import { isTableHeaderEnabled } from '../helpers';
 

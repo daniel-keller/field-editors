@@ -29,7 +29,8 @@
     "storybook": "storybook dev -p 9000",
     "build-storybook": "storybook build -o dist",
     "cm": "git-cz",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "build:schema": "ts-node -O '{\"module\": \"commonjs\"}' ./packages/rich-text/src/rich-text-types/tools/jsonSchemaGen"
   },
   "workspaces": [
     "packages/**",
@@ -129,6 +130,7 @@
     "babel-preset-react-app": "9.1.2",
     "react": "16.14.0",
     "react-dom": "16.14.0",
+    "@cspotcode/source-map-consumer": "^0.8.0",
     "@contentful/app-sdk": "4.29.0",
     "@contentful/rich-text-types": "16.7.0"
   },

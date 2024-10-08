@@ -1,9 +1,10 @@
 import * as React from 'react';
 
 import tokens from '@contentful/f36-tokens';
-import { BLOCKS } from '@contentful/rich-text-types';
 import { css } from 'emotion';
 import * as Slate from 'slate-react';
+
+import { BLOCKS } from '../../../rich-text-types/src';
 
 const style = css`
   margin-bottom: 1.5em;

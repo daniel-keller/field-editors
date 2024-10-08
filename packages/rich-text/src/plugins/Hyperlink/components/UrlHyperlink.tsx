@@ -3,11 +3,12 @@ import * as React from 'react';
 import { Link } from '@contentful/app-sdk';
 import { TextLink } from '@contentful/f36-components';
 
-import { Element, RenderElementProps } from '../../../internal/types';
+import { Element, PlateEditor } from '../../../internal/types';
 import { handleCopyLink, handleEditLink, handleRemoveLink } from './linkHandlers';
 import { LinkPopover } from './LinkPopover';
 import { styles } from './styles';
 import { useHyperlinkCommon } from './useHyperlinkCommon';
+import WrappedLinkButton from './WrappedLinkButton';
 
 type UrlHyperlinkProps = {
   element: Element & {
@@ -24,7 +25,8 @@ type UrlHyperlinkProps = {
   };
   target?: Link;
   onEntityFetchComplete?: VoidFunction;
-  children: Pick<RenderElementProps, 'children'>;
+  children: React.ReactNode;
+  editor?: PlateEditor;
 };
 
 export function UrlHyperlink(props: UrlHyperlinkProps) {
@@ -32,6 +34,7 @@ export function UrlHyperlink(props: UrlHyperlinkProps) {
     props.element
   );
   const uri = props.element.data?.uri;
+  const isButton = props.element.data?.isButton;
 
   const popoverText = (
     <TextLink className={styles.openLink} href={uri} rel="noopener noreferrer" target="_blank">
@@ -54,7 +57,7 @@ export function UrlHyperlink(props: UrlHyperlinkProps) {
         onClick={(e) => e.preventDefault()}
         className={styles.hyperlink}
       >
-        {props.children}
+        {isButton ? <WrappedLinkButton {...props} editor={editor} /> : props.children}
       </TextLink>
     </LinkPopover>
   );

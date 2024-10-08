@@ -8,8 +8,9 @@ import {
   WrappedEntryCard,
   useResource,
 } from '@contentful/field-editor-reference';
-import { ResourceLink } from '@contentful/rich-text-types';
 import areEqual from 'fast-deep-equal';
+
+import { ResourceLink } from '../../rich-text-types/src';
 
 interface InternalEntryCard {
   isDisabled: boolean;

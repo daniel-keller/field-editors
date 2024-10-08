@@ -1,6 +1,7 @@
-import { BLOCKS, INLINES } from '@contentful/rich-text-types';
 import { createText } from '@udecode/plate-test-utils';
 import { createHyperscript, HyperscriptCreators } from 'slate-hyperscript';
+
+import { BLOCKS, INLINES } from '../rich-text-types/src';
 
 type Creator = HyperscriptCreators[0];
 
@@ -49,9 +50,9 @@ const createHyperlink: Creator = (_, attrs, children) => {
 
 const createInline: Creator = (_, attrs, children) => {
   return {
-    type: INLINES.EMBEDDED_ENTRY,
+    type: attrs.type === 'Entry' ? INLINES.EMBEDDED_ENTRY : INLINES.EMBEDDED_ASSET,
     data: {
-      target: createSysLink('Entry', attrs.id),
+      target: createSysLink(attrs.type, attrs.id),
     },
     isVoid: true,
     children: children.length > 0 ? children : voidChildren,

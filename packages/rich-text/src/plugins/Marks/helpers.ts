@@ -1,9 +1,9 @@
-import { MARKS } from '@contentful/rich-text-types';
 import isHotkey from 'is-hotkey';
 
 import { isMarkActive } from '../../internal/queries';
 import { toggleMark } from '../../internal/transforms';
 import { PlateEditor, HotkeyPlugin, KeyboardHandler } from '../../internal/types';
+import { MARKS } from '../../rich-text-types/src';
 
 export const toggleMarkAndDeactivateConflictingMarks = (editor: PlateEditor, mark: MARKS) => {
   const subs = [MARKS.SUPERSCRIPT, MARKS.SUBSCRIPT];

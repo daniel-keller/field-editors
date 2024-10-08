@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import { EntityLink } from '@contentful/field-editor-reference';
+import { css } from 'emotion';
 import { useReadOnly, useSelected } from 'slate-react';
 
 import { useContentfulEditor } from '../../ContentfulEditorProvider';
@@ -20,8 +21,25 @@ type LinkedEntityBlockProps = {
     };
   };
   attributes: Pick<RenderElementProps, 'attributes'>;
-  children: Pick<RenderElementProps, 'children'>;
+  children: React.ReactNode;
 };
+
+const wrapper = css`
+  text-align: center;
+  border-radius: 5px;
+  background-image: linear-gradient(
+    45deg,
+    #f2f2f2 25%,
+    #e3e3e3 25%,
+    #e3e3e3 50%,
+    #f2f2f2 50%,
+    #f2f2f2 75%,
+    #e3e3e3 75%,
+    #e3e3e3 100%
+  );
+  background-size: 20px 20px;
+  padding: 15px;
+`;
 
 export function LinkedEntityBlock(props: LinkedEntityBlockProps) {
   const { attributes, children, element } = props;
@@ -47,7 +65,7 @@ export function LinkedEntityBlock(props: LinkedEntityBlockProps) {
     <LinkedBlockWrapper
       attributes={attributes}
       card={
-        <>
+        <div className={wrapper}>
           {entityType === 'Entry' && (
             <FetchingWrappedEntryCard
               sdk={sdk}
@@ -72,7 +90,7 @@ export function LinkedEntityBlock(props: LinkedEntityBlockProps) {
               onEntityFetchComplete={onEntityFetchComplete}
             />
           )}
-        </>
+        </div>
       }
       link={element.data.target}
     >

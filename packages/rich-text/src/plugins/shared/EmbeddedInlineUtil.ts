@@ -1,5 +1,4 @@
 import { FieldAppSDK } from '@contentful/app-sdk';
-import { INLINES } from '@contentful/rich-text-types';
 import { HotkeyPlugin } from '@udecode/plate-common';
 import isHotkey from 'is-hotkey';
 
@@ -12,9 +11,10 @@ import { watchCurrentSlide } from '../../helpers/sdkNavigatorSlideIn';
 import { insertNodes, select } from '../../internal/transforms';
 import { KeyboardHandler } from '../../internal/types';
 import { TrackingPluginActions } from '../../plugins/Tracking';
+import { INLINES } from '../../rich-text-types/src';
 
 export function getWithEmbeddedEntryInlineEvents(
-  nodeType: INLINES.EMBEDDED_ENTRY | INLINES.EMBEDDED_RESOURCE,
+  nodeType: INLINES.EMBEDDED_ENTRY | INLINES.EMBEDDED_ASSET | INLINES.EMBEDDED_RESOURCE,
   sdk: FieldAppSDK
 ): KeyboardHandler<HotkeyPlugin> {
   return function withEmbeddedEntryInlineEvents(editor, { options: { hotkey } }) {
@@ -25,7 +25,7 @@ export function getWithEmbeddedEntryInlineEvents(
         if (nodeType === INLINES.EMBEDDED_RESOURCE) {
           selectResourceEntityAndInsert(editor, sdk, editor.tracking.onShortcutAction);
         } else {
-          selectEntityAndInsert(editor, sdk, editor.tracking.onShortcutAction);
+          selectEntityAndInsert(nodeType, editor, sdk, editor.tracking.onShortcutAction);
         }
       }
     };
@@ -43,38 +43,46 @@ const getLink = (entity) => {
 };
 
 const createInlineEntryNode = (nodeType, entity) => {
+  const data = {
+    target: nodeType === INLINES.EMBEDDED_RESOURCE ? entity : getLink(entity),
+  };
+
+  if (nodeType === INLINES.EMBEDDED_ASSET) {
+    data['float'] = 'left';
+  }
+
   return {
     type: nodeType,
     children: [{ text: '' }],
-    data: {
-      target: nodeType === INLINES.EMBEDDED_RESOURCE ? entity : getLink(entity),
-    },
+    data: data,
   };
 };
 
 export async function selectEntityAndInsert(
+  nodeType,
   editor,
   sdk,
   logAction: TrackingPluginActions['onShortcutAction'] | TrackingPluginActions['onToolbarAction']
 ) {
-  const nodeType = INLINES.EMBEDDED_ENTRY;
   logAction('openCreateEmbedDialog', { nodeType });
 
-  const config = {
-    ...newEntitySelectorConfigFromRichTextField(sdk.field, nodeType),
-    withCreate: true,
-  };
+  const { field, dialogs } = sdk;
+  const baseConfig = newEntitySelectorConfigFromRichTextField(field, nodeType);
+  const selectEntity =
+    baseConfig.entityType === 'Asset' ? dialogs.selectSingleAsset : dialogs.selectSingleEntry;
+  const config = { ...baseConfig, withCreate: true };
+
   const { selection } = editor;
   const rteSlide = watchCurrentSlide(sdk.navigator);
-  const entry = await sdk.dialogs.selectSingleEntry(config);
+  const entity = await selectEntity(config);
 
-  if (!entry) {
+  if (!entity) {
     logAction('cancelCreateEmbedDialog', { nodeType });
   } else {
     // Selection prevents incorrect position of inserted ref when RTE doesn't have focus
     // (i.e. when using hotkeys and slide-in)
     select(editor, selection);
-    insertNodes(editor, createInlineEntryNode(nodeType, entry));
+    insertNodes(editor, createInlineEntryNode(nodeType, entity));
     logAction('insert', { nodeType });
   }
   rteSlide.onActive(() => {

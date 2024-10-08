@@ -2,7 +2,6 @@
  * Credit: Modified version of Plate's list plugin
  * See: https://github.com/udecode/plate/blob/main/packages/nodes/list
  */
-import { TEXT_CONTAINERS, BLOCKS } from '@contentful/rich-text-types';
 import { findNode } from '@udecode/plate-common';
 
 import {
@@ -15,6 +14,7 @@ import {
 } from '../../internal/queries';
 import { insertNodes } from '../../internal/transforms';
 import { PlateEditor, NodeEntry, Node, Element } from '../../internal/types';
+import { TEXT_CONTAINERS, BLOCKS } from '../../rich-text-types/src';
 
 const getFirstAncestorOfType = (root: Node, entry: NodeEntry): NodeEntry => {
   let ancestor = getParentPath(entry[1]);
@@ -46,7 +46,7 @@ const trimList = (listRoot: Node): Node[] => {
         ? commonAncestor
         : getCommonNode(listRoot, textEntry[1], commonAncestor[1]),
     // any list item would do, we grab the first one
-    getFirstAncestorOfType(listRoot, textEntries[0]),
+    getFirstAncestorOfType(listRoot, textEntries[0])
   );
 
   return isListRoot(commonAncestorEntry[0])
@@ -96,7 +96,7 @@ export const insertListFragment = (editor: PlateEditor) => {
 
     if (liEntry) {
       const nodes = unwrapTextContainerAtStart(
-        trimLiWrapper(fragment.flatMap((node) => trimList(node))),
+        trimLiWrapper(fragment.flatMap((node) => trimList(node)))
       );
 
       let firstBlockIndex = nodes.findIndex((node) => isBlockNode(editor, node));

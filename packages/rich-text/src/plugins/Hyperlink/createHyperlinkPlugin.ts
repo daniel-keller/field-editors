@@ -1,13 +1,13 @@
 import * as React from 'react';
 
 import { FieldAppSDK } from '@contentful/app-sdk';
-import { INLINES } from '@contentful/rich-text-types';
 import { AnyObject, HotkeyPlugin } from '@udecode/plate-common';
 import isHotkey from 'is-hotkey';
 
 import { isLinkActive, unwrapLink } from '../../helpers/editor';
 import { transformRemove } from '../../helpers/transformers';
-import { KeyboardHandler, PlatePlugin } from '../../internal/types';
+import { KeyboardHandler, PlatePlugin } from '../../internal';
+import { INLINES } from '../../rich-text-types/src';
 import { EntityHyperlink } from './components/EntityHyperlink';
 import { ResourceHyperlink } from './components/ResourceHyperlink';
 import { UrlHyperlink } from './components/UrlHyperlink';

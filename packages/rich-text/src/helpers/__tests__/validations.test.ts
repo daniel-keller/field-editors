@@ -1,6 +1,6 @@
 import { createFakeFieldAPI } from '@contentful/field-editor-test-utils';
-import { MARKS } from '@contentful/rich-text-types';
 
+import { MARKS } from '../../rich-text-types/src';
 import { isMarkEnabled } from '../validations';
 
 describe('validations', () => {

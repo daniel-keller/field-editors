@@ -4,7 +4,6 @@
  *
  * See: https://github.com/udecode/plate/blob/main/packages/nodes/list
  */
-import { BLOCKS, TEXT_CONTAINERS } from '@contentful/rich-text-types';
 import {
   ELEMENT_DEFAULT,
   getPluginType,
@@ -15,6 +14,7 @@ import { getListItemEntry, moveListItemUp, unwrapList, ELEMENT_LI } from '@udeco
 import { onKeyDownResetNode, ResetNodePlugin, SIMULATE_BACKSPACE } from '@udecode/plate-reset-node';
 
 import { PlateEditor, Value } from '../../internal/types';
+import { BLOCKS, TEXT_CONTAINERS } from '../../rich-text-types/src';
 import { insertListItem } from './transforms/insertListItem';
 
 const listBreak = (editor: PlateEditor): boolean => {
@@ -57,7 +57,7 @@ const listBreak = (editor: PlateEditor): boolean => {
           },
         ],
       },
-    }),
+    })
   )(SIMULATE_BACKSPACE);
   if (didReset) {
     return true;

@@ -1,7 +1,6 @@
 /**
  * https://platejs.org/docs/typescript
  */
-import { MARKS } from '@contentful/rich-text-types';
 import * as p from '@udecode/plate-common';
 import * as s from 'slate';
 import * as sr from 'slate-react';
@@ -12,6 +11,7 @@ import type {
 import type { TextInsertTextOptions as SlateTextInsertTextOptions } from 'slate/dist/interfaces/transforms/text';
 
 import { TrackingPluginActions } from '../../plugins/Tracking';
+import { MARKS } from '../../rich-text-types/src';
 
 export interface Text extends p.TText {
   [MARKS.BOLD]?: boolean;

@@ -9,6 +9,8 @@ export type RichTextTrackingActionName =
   // Marks
   | 'mark'
   | 'unmark'
+  // Columns
+  | 'insertColumns'
   // Tables
   | 'insertTable'
   | 'insertTableRow'

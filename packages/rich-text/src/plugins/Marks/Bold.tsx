@@ -1,12 +1,12 @@
 import * as React from 'react';
 
 import { FormatBoldIcon } from '@contentful/f36-icons';
-import { MARKS } from '@contentful/rich-text-types';
 import { createBoldPlugin as createDefaultBoldPlugin } from '@udecode/plate-basic-marks';
 import { css } from 'emotion';
 
 import { someHtmlElement } from '../../internal/queries';
 import { PlatePlugin, RenderLeafProps } from '../../internal/types';
+import { MARKS } from '../../rich-text-types/src';
 import { createMarkToolbarButton } from './components/MarkToolbarButton';
 import { buildMarkEventHandler } from './helpers';
 

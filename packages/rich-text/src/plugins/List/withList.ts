@@ -2,10 +2,10 @@
  * Credit: Modified version of Plate's list plugin
  * See: https://github.com/udecode/plate/blob/main/packages/nodes/list
  */
-import { LIST_ITEM_BLOCKS } from '@contentful/rich-text-types';
 import { normalizeList, deleteFragmentList, deleteForwardList } from '@udecode/plate-list';
 
 import { WithOverride } from '../../internal/types';
+import { LIST_ITEM_BLOCKS } from '../../rich-text-types/src';
 import { insertListBreak } from './insertListBreak';
 import { insertListFragment } from './insertListFragment';
 

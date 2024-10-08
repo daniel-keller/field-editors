@@ -1,5 +1,4 @@
-import { BLOCKS } from '@contentful/rich-text-types';
-
+import { BLOCKS } from '../../../packages/rich-text/src/blocks';
 import { block, text } from '../../../packages/rich-text/src/helpers/nodeFactory';
 
 export const KEYS = {

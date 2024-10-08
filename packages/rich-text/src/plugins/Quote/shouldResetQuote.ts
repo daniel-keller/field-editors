@@ -1,8 +1,8 @@
-import { BLOCKS, TEXT_CONTAINERS } from '@contentful/rich-text-types';
 import { isLastChild, hasSingleChild } from '@udecode/plate-common';
 
 import { getAboveNode, getBlockAbove, isAncestorEmpty } from '../../internal/queries';
 import { PlateEditor, Ancestor } from '../../internal/types';
+import { BLOCKS, TEXT_CONTAINERS } from '../../rich-text-types/src';
 
 /**
  * Returns true if we are:

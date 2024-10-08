@@ -2,7 +2,9 @@ import { FieldAppSDK } from '@contentful/app-sdk';
 import { PlateProps } from '@udecode/plate-common';
 
 import { PlatePlugin } from '../internal/types';
+import { createAlignPlugin } from './Align';
 import { createSoftBreakPlugin, createExitBreakPlugin, createResetNodePlugin } from './Break';
+import { createColumnPlugin } from './Column';
 import { createCommandPalettePlugin } from './CommandPalette';
 import { isCommandPromptPluginEnabled } from './CommandPalette/useCommands';
 import { createDeserializeDocxPlugin } from './DeserializeDocx';
@@ -11,7 +13,10 @@ import {
   createEmbeddedAssetBlockPlugin,
   createEmbeddedEntryBlockPlugin,
 } from './EmbeddedEntityBlock';
-import { createEmbeddedEntityInlinePlugin } from './EmbeddedEntityInline';
+import {
+  createEmbeddedEntryInlinePlugin,
+  createEmbeddedAssetInlinePlugin,
+} from './EmbeddedEntityInline';
 import { createEmbeddedResourceBlockPlugin } from './EmbeddedResourceBlock';
 import { createEmbeddedResourceInlinePlugin } from './EmbeddedResourceInline';
 import { createHeadingPlugin } from './Heading';
@@ -53,14 +58,17 @@ export const getPlugins = (
   createHrPlugin(),
   createHeadingPlugin(),
   createQuotePlugin(),
+  createColumnPlugin(),
   createTablePlugin(),
+  createAlignPlugin(),
   createEmbeddedEntryBlockPlugin(sdk),
   createEmbeddedAssetBlockPlugin(sdk),
   createEmbeddedResourceBlockPlugin(sdk),
 
   // Inline elements
   createHyperlinkPlugin(sdk),
-  createEmbeddedEntityInlinePlugin(sdk),
+  createEmbeddedEntryInlinePlugin(sdk),
+  createEmbeddedAssetInlinePlugin(sdk),
   createEmbeddedResourceInlinePlugin(sdk),
 
   // Marks

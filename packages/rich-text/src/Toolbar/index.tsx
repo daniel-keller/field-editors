@@ -4,13 +4,14 @@ import { FieldAppSDK } from '@contentful/app-sdk';
 import { Flex, IconButton, Menu } from '@contentful/f36-components';
 import { MoreHorizontalIcon } from '@contentful/f36-icons';
 import tokens from '@contentful/f36-tokens';
-import { BLOCKS, INLINES, MARKS } from '@contentful/rich-text-types';
 import { css } from 'emotion';
 
 import { useContentfulEditor } from '../ContentfulEditorProvider';
 import { isNodeTypeSelected } from '../helpers/editor';
 import { isMarkEnabled, isNodeTypeEnabled } from '../helpers/validations';
 import { isMarkActive } from '../internal/queries';
+import { ToolbarAlignButton } from '../plugins/Align';
+import { ToolbarColumnButton } from '../plugins/Column';
 import { ToolbarHeadingButton } from '../plugins/Heading';
 import { ToolbarHrButton } from '../plugins/Hr';
 import { ToolbarHyperlinkButton } from '../plugins/Hyperlink';
@@ -30,6 +31,7 @@ import {
 import { ToolbarUnderlineButton } from '../plugins/Marks/Underline';
 import { ToolbarQuoteButton } from '../plugins/Quote';
 import { ToolbarTableButton } from '../plugins/Table';
+import { BLOCKS, INLINES, MARKS } from '../rich-text-types/src';
 import { useSdkContext } from '../SdkProvider';
 import { ButtonRedo } from './components/ButtonRedo';
 import { ButtonUndo } from './components/ButtonUndo';
@@ -181,7 +183,9 @@ const Toolbar = ({ isDisabled }: ToolbarProps) => {
           </>
         )}
 
-        {validationInfo.isAnyBlockFormattingEnabled && <span className={styles.divider} />}
+        <span className={styles.divider} />
+
+        <ToolbarAlignButton isDisabled={isDisabled} />
 
         <ToolbarListButton isDisabled={isDisabled || !canInsertBlocks} />
 
@@ -190,6 +194,9 @@ const Toolbar = ({ isDisabled }: ToolbarProps) => {
         )}
         {isNodeTypeEnabled(sdk.field, BLOCKS.HR) && (
           <ToolbarHrButton isDisabled={isDisabled || !canInsertBlocks} />
+        )}
+        {isNodeTypeEnabled(sdk.field, BLOCKS.COLUMN) && (
+          <ToolbarColumnButton isDisabled={shouldDisableTables} />
         )}
         {isNodeTypeEnabled(sdk.field, BLOCKS.TABLE) && (
           <ToolbarTableButton isDisabled={shouldDisableTables} />

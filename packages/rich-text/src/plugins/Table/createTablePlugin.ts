@@ -1,4 +1,3 @@
-import { BLOCKS, CONTAINERS } from '@contentful/rich-text-types';
 import {
   createTablePlugin as createDefaultTablePlugin,
   ELEMENT_TABLE,
@@ -24,6 +23,7 @@ import {
 } from '../../internal/queries';
 import { insertNodes } from '../../internal/transforms';
 import { PlatePlugin, PlateEditor, Value } from '../../internal/types';
+import { BLOCKS, CONTAINERS } from '../../rich-text-types/src';
 import { Cell } from './components/Cell';
 import { HeaderCell } from './components/HeaderCell';
 import { Row } from './components/Row';

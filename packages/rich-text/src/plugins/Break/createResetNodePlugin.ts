@@ -1,10 +1,10 @@
-import { BLOCKS } from '@contentful/rich-text-types';
 import {
   createResetNodePlugin as createDefaultResetNodePlugin,
   ResetNodePlugin,
 } from '@udecode/plate-reset-node';
 
 import { PlatePlugin, Value, PlateEditor } from '../../internal/types';
+import { BLOCKS } from '../../rich-text-types/src';
 
 export const createResetNodePlugin = (): PlatePlugin =>
   createDefaultResetNodePlugin<ResetNodePlugin<Value, PlateEditor>, Value, PlateEditor>({

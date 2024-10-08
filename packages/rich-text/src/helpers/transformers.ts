@@ -1,4 +1,3 @@
-import { BLOCKS, INLINES } from '@contentful/rich-text-types';
 
 import {
   insertNodes,
@@ -8,6 +7,7 @@ import {
   liftNodes,
 } from '../internal/transforms';
 import { PlateEditor, NodeEntry } from '../internal/types';
+import { BLOCKS, INLINES } from '../rich-text-types/src';
 import { extractParagraphs } from './extractNodes';
 
 export const transformRemove = (editor: PlateEditor, [, path]: NodeEntry) => {

@@ -1,6 +1,8 @@
-import { helpers, BLOCKS } from '@contentful/rich-text-types';
-import { getSchemaWithNodeType } from '@contentful/rich-text-types/dist/schemas';
 import Ajv, { ErrorObject } from 'ajv';
+
+import { helpers, BLOCKS } from '../rich-text-types/src';
+// import { getSchemaWithNodeType } from '@contentful/rich-text-types/dist/schemas';
+import { getSchemaWithNodeType } from '../rich-text-types/src/schemas';
 
 const ajv = new Ajv({ allErrors: true, verbose: true });
 

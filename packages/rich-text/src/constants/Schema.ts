@@ -1,10 +1,4 @@
-import {
-  BLOCKS,
-  INLINES,
-  TOP_LEVEL_BLOCKS,
-  VOID_BLOCKS,
-  CONTAINERS,
-} from '@contentful/rich-text-types';
+import { BLOCKS, INLINES, TOP_LEVEL_BLOCKS, VOID_BLOCKS, CONTAINERS } from '../rich-text-types/src';
 
 const inlines = Object.values(INLINES).map((type) => ({ type }));
 
@@ -123,6 +117,9 @@ export default {
       ],
     },
     [INLINES.EMBEDDED_ENTRY]: {
+      isVoid: true,
+    },
+    [INLINES.EMBEDDED_ASSET]: {
       isVoid: true,
     },
     [INLINES.EMBEDDED_RESOURCE]: {

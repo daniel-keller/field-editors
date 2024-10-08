@@ -1,10 +1,10 @@
-import { BLOCKS, TEXT_CONTAINERS } from '@contentful/rich-text-types';
 
 import { INLINE_TYPES } from '../../helpers/editor';
 import { transformWrapIn } from '../../helpers/transformers';
 import { getParentNode, isText } from '../../internal/queries';
 import { insertText } from '../../internal/transforms';
 import { Element } from '../../internal/types';
+import { BLOCKS, TEXT_CONTAINERS } from '../../rich-text-types/src';
 import { NormalizerRule } from './types';
 
 const isInline = (node: Element) => INLINE_TYPES.includes(node.type);

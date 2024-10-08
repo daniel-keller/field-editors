@@ -1,4 +1,3 @@
-import { BLOCKS, TEXT_CONTAINERS } from '@contentful/rich-text-types';
 
 import {
   getAboveNode,
@@ -28,6 +27,7 @@ import {
   Location,
   BaseRange,
 } from '../../internal/types';
+import { BLOCKS, TEXT_CONTAINERS } from '../../rich-text-types/src';
 
 export function createTextPlugin(restrictedMarks: string[] = []): PlatePlugin {
   return {

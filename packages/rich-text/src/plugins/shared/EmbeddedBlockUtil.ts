@@ -1,5 +1,4 @@
 import { FieldAppSDK } from '@contentful/app-sdk';
-import { BLOCKS, TEXT_CONTAINERS } from '@contentful/rich-text-types';
 import { HotkeyPlugin } from '@udecode/plate-common';
 import isHotkey from 'is-hotkey';
 
@@ -25,6 +24,7 @@ import {
   KeyboardHandler,
   removeNodes,
 } from '../../internal';
+import { TEXT_CONTAINERS, BLOCKS } from '../../rich-text-types/src';
 import { TrackingPluginActions } from '../Tracking';
 
 export function getWithEmbeddedBlockEvents(

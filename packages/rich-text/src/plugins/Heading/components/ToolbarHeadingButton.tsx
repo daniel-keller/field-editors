@@ -3,7 +3,6 @@ import * as React from 'react';
 import { Menu, Button } from '@contentful/f36-components';
 import { ChevronDownIcon } from '@contentful/f36-icons';
 import tokens from '@contentful/f36-tokens';
-import { BLOCKS } from '@contentful/rich-text-types';
 import { css, cx } from 'emotion';
 
 import { useContentfulEditor } from '../../../ContentfulEditorProvider';
@@ -15,6 +14,7 @@ import {
 } from '../../../helpers/editor';
 import { isNodeTypeEnabled } from '../../../helpers/validations';
 import { Element } from '../../../internal/types';
+import { BLOCKS } from '../../../rich-text-types/src';
 import { useSdkContext } from '../../../SdkProvider';
 
 const styles = {

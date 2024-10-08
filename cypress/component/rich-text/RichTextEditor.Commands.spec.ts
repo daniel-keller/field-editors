@@ -1,6 +1,5 @@
-import { BLOCKS, INLINES } from '@contentful/rich-text-types';
-
 import { block, document as doc, text } from '../../../packages/rich-text/src/helpers/nodeFactory';
+import { BLOCKS, INLINES } from '../../../packages/rich-text/src/rich-text-types/src';
 import { createRichTextFakeSdk } from '../../fixtures';
 import { RichTextPage } from './RichTextPage';
 import { mountRichTextEditor } from './utils';

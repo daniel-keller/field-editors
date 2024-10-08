@@ -10,6 +10,7 @@ import { handleEditLink, handleRemoveLink } from './linkHandlers';
 import { LinkPopover } from './LinkPopover';
 import { styles } from './styles';
 import { useHyperlinkCommon } from './useHyperlinkCommon';
+import WrappedLinkButton from './WrappedLinkButton';
 
 export type HyperlinkElementProps = {
   element: Element & {
@@ -25,7 +26,7 @@ export type HyperlinkElementProps = {
   };
   target: Link;
   attributes: Pick<RenderElementProps, 'attributes'>;
-  children: Pick<RenderElementProps, 'children'>;
+  children: React.ReactNode;
   onEntityFetchComplete: VoidFunction;
 };
 
@@ -34,7 +35,7 @@ export function EntityHyperlink(props: HyperlinkElementProps) {
     props.element
   );
   const { onEntityFetchComplete } = useLinkTracking();
-  const { target } = props.element.data;
+  const { target, isButton } = props.element.data;
 
   const tooltipContent = useEntityInfo({
     target,
@@ -68,7 +69,7 @@ export function EntityHyperlink(props: HyperlinkElementProps) {
         data-link-type={target.sys.linkType}
         data-link-id={target.sys.id}
       >
-        {props.children}
+        {isButton ? <WrappedLinkButton {...props} editor={editor} /> : props.children}
       </Text>
     </LinkPopover>
   );
