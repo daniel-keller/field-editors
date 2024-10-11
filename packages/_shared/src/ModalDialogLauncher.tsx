@@ -48,6 +48,7 @@ export function openDialog<T>(
 ) {
   const key = Date.now();
   const size = isNumber(options.width) ? `${options.width}px` : options.width;
+
   return open(({ isShown, onClose }) => {
     const onCloseHandler = () => onClose();
     return (

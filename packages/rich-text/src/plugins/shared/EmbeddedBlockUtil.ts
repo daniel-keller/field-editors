@@ -70,8 +70,10 @@ export async function selectEntityAndInsert(
 
   const { field, dialogs } = sdk;
   const baseConfig = newEntitySelectorConfigFromRichTextField(field, nodeType);
-  const selectEntity =
-    baseConfig.entityType === 'Asset' ? dialogs.selectSingleAsset : dialogs.selectSingleEntry;
+  const selectEntity = baseConfig.entityType === 'Asset'
+    ? dialogs.selectSingleAsset
+    : dialogs.selectSingleEntry;
+
   const config = { ...baseConfig, withCreate: true };
 
   const { selection } = editor;
@@ -167,7 +169,7 @@ const createNode = (nodeType, entity) => {
       target: nodeType === BLOCKS.EMBEDDED_RESOURCE ? entity : getLink(entity),
     },
     children: [{ text: '' }],
-    isVoid: true,
+    // isVoid: true,
   };
 };
 

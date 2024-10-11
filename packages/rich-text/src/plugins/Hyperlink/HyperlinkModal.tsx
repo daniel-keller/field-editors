@@ -226,7 +226,7 @@ export function HyperlinkModal(props: HyperlinkModalProps) {
 
   return (
     <EntityProvider sdk={props.sdk}>
-      <React.Fragment>
+      <>
         <ModalContent>
           <Form>
             {!props.linkType && (
@@ -551,7 +551,7 @@ export function HyperlinkModal(props: HyperlinkModalProps) {
             {props.linkType ? 'Update' : 'Insert'}
           </Button>
         </ModalControls>
-      </React.Fragment>
+      </>
     </EntityProvider>
   );
 }

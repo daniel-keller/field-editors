@@ -44,18 +44,19 @@ const InternalAssetCard = React.memo(
 InternalAssetCard.displayName = 'InternalAssetCard';
 
 interface FetchingWrappedAssetCardProps {
-  assetId: string;
-  isDisabled: boolean;
-  isSelected: boolean;
-  locale: string;
-  onEdit?: () => void;
-  onRemove?: () => unknown;
-  sdk: FieldAppSDK;
-  onEntityFetchComplete?: VoidFunction;
+  assetId: string
+  isDisabled: boolean
+  isSelected: boolean
+  locale: string
+  onEdit?: () => void
+  onRemove?: () => unknown
+  sdk: FieldAppSDK
+  onEntityFetchComplete?: (asset?: Asset) => void
 }
 
 export function FetchingWrappedAssetCard(props: FetchingWrappedAssetCardProps) {
   const { onEntityFetchComplete } = props;
+
   const { data: asset, status } = useEntity<Asset>('Asset', props.assetId);
   const { getEntityScheduledActions } = useEntityLoader();
   const loadEntityScheduledActions = React.useCallback(
@@ -65,9 +66,9 @@ export function FetchingWrappedAssetCard(props: FetchingWrappedAssetCardProps) {
 
   React.useEffect(() => {
     if (status === 'success') {
-      onEntityFetchComplete?.();
+      onEntityFetchComplete?.(asset);
     }
-  }, [onEntityFetchComplete, status]);
+  }, [onEntityFetchComplete, status, asset]);
 
   if (status === 'loading' || status === 'idle') {
     return <AssetCard size="default" isLoading />;
