@@ -269,3 +269,20 @@ export interface Table extends Block {
    */
   content: TableRow[];
 }
+
+export interface AccordionTitle extends Block {
+  nodeType: BLOCKS.ACCORDION_TITLE;
+  data: EmptyNodeData;
+
+  content: Array<Inline | Text>
+}
+
+export interface Accordion extends Block {
+  nodeType: BLOCKS.ACCORDION;
+  data: EmptyNodeData;
+
+  /**
+   * @minItems 1
+   */
+  content: Array<AccordionTitle | Paragraph>;
+}

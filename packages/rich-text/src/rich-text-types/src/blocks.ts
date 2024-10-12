@@ -30,4 +30,7 @@ export enum BLOCKS {
   TABLE_ROW = 'table-row',
   TABLE_CELL = 'table-cell',
   TABLE_HEADER_CELL = 'table-header-cell',
+
+  ACCORDION = 'accordion',
+  ACCORDION_TITLE = 'accordion-title'
 }

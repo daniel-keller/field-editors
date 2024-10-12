@@ -18,7 +18,8 @@ export type TopLevelBlockEnum =
   | BLOCKS.EMBEDDED_ASSET
   | BLOCKS.EMBEDDED_RESOURCE
   | BLOCKS.TABLE
-  | BLOCKS.COLUMN_GROUP;
+  | BLOCKS.COLUMN_GROUP
+  | BLOCKS.ACCORDION;
 
 /**
  * Array of all top level block types.
@@ -41,6 +42,7 @@ export const TOP_LEVEL_BLOCKS: TopLevelBlockEnum[] = [
   BLOCKS.EMBEDDED_RESOURCE,
   BLOCKS.TABLE,
   BLOCKS.COLUMN_GROUP,
+  BLOCKS.ACCORDION,
 ];
 
 export type ListItemBlockEnum =
@@ -76,7 +78,7 @@ export const LIST_ITEM_BLOCKS: TopLevelBlockEnum[] = [
   BLOCKS.QUOTE,
   BLOCKS.EMBEDDED_ENTRY,
   BLOCKS.EMBEDDED_ASSET,
-  BLOCKS.EMBEDDED_RESOURCE,
+  BLOCKS.EMBEDDED_RESOURCE
 ];
 
 export const TABLE_BLOCKS = [
@@ -94,24 +96,6 @@ export const VOID_BLOCKS = [
 ];
 
 /**
- * Dictionary of all container block types, and the set block types they accept as children.
- *
- * Note: This does not include `[BLOCKS.DOCUMENT]: TOP_LEVEL_BLOCKS`
- */
-export const CONTAINERS = {
-  [BLOCKS.OL_LIST]: [BLOCKS.LIST_ITEM],
-  [BLOCKS.UL_LIST]: [BLOCKS.LIST_ITEM],
-  [BLOCKS.LIST_ITEM]: LIST_ITEM_BLOCKS,
-  [BLOCKS.QUOTE]: [BLOCKS.PARAGRAPH],
-  [BLOCKS.COLUMN]: [BLOCKS.COLUMN],
-  [BLOCKS.COLUMN_GROUP]: [BLOCKS.COLUMN_GROUP],
-  [BLOCKS.TABLE]: [BLOCKS.TABLE_ROW],
-  [BLOCKS.TABLE_ROW]: [BLOCKS.TABLE_CELL, BLOCKS.TABLE_HEADER_CELL],
-  [BLOCKS.TABLE_CELL]: [BLOCKS.PARAGRAPH, BLOCKS.UL_LIST, BLOCKS.OL_LIST],
-  [BLOCKS.TABLE_HEADER_CELL]: [BLOCKS.PARAGRAPH],
-};
-
-/**
  * Array of all heading levels
  */
 export const HEADINGS = [
@@ -126,7 +110,27 @@ export const HEADINGS = [
 /**
  * Array of all block types that may contain text and inline nodes.
  */
-export const TEXT_CONTAINERS = [BLOCKS.PARAGRAPH, ...HEADINGS];
+export const TEXT_CONTAINERS = [BLOCKS.ACCORDION_TITLE, BLOCKS.PARAGRAPH, ...HEADINGS];
+
+/**
+ * Dictionary of all container block types, and the set block types they accept as children.
+ *
+ * Note: This does not include `[BLOCKS.DOCUMENT]: TOP_LEVEL_BLOCKS`
+ */
+export const CONTAINERS = {
+  [BLOCKS.OL_LIST]: [BLOCKS.LIST_ITEM],
+  [BLOCKS.UL_LIST]: [BLOCKS.LIST_ITEM],
+  [BLOCKS.LIST_ITEM]: LIST_ITEM_BLOCKS,
+  [BLOCKS.QUOTE]: [BLOCKS.PARAGRAPH],
+  [BLOCKS.COLUMN]: [BLOCKS.COLUMN_GROUP],
+  [BLOCKS.COLUMN_GROUP]: [...TEXT_CONTAINERS, BLOCKS.UL_LIST, BLOCKS.OL_LIST, BLOCKS.EMBEDDED_ASSET],
+  [BLOCKS.TABLE]: [BLOCKS.TABLE_ROW],
+  [BLOCKS.TABLE_ROW]: [BLOCKS.TABLE_CELL, BLOCKS.TABLE_HEADER_CELL],
+  [BLOCKS.TABLE_CELL]: [BLOCKS.PARAGRAPH, BLOCKS.UL_LIST, BLOCKS.OL_LIST],
+  [BLOCKS.TABLE_HEADER_CELL]: [BLOCKS.PARAGRAPH],
+  [BLOCKS.ACCORDION]: [BLOCKS.UL_LIST, BLOCKS.OL_LIST, ...TEXT_CONTAINERS]
+};
+
 
 /**
  * Node types before `tables` release.
