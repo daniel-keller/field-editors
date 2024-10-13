@@ -124,6 +124,7 @@ const Toolbar = ({ isDisabled }: ToolbarProps) => {
   const validationInfo = React.useMemo(() => getValidationInfo(sdk.field), [sdk.field]);
   const isListSelected =
     isNodeTypeSelected(editor, BLOCKS.UL_LIST) || isNodeTypeSelected(editor, BLOCKS.OL_LIST);
+  const isAccorionTitleSelected = isNodeTypeSelected(editor, BLOCKS.ACCORDION_TITLE);
   const isBlockquoteSelected = isNodeTypeSelected(editor, BLOCKS.QUOTE);
   const shouldDisableTables =
     isDisabled || !canInsertBlocks || isListSelected || isBlockquoteSelected;
@@ -154,7 +155,7 @@ const Toolbar = ({ isDisabled }: ToolbarProps) => {
         <ButtonRedo />
         {validationInfo.isAnyMarkEnabled && <span className={styles.divider} />}
 
-        {isMarkEnabled(sdk.field, MARKS.BOLD) && <ToolbarBoldButton isDisabled={isDisabled} />}
+        {isMarkEnabled(sdk.field, MARKS.BOLD) && <ToolbarBoldButton isDisabled={isDisabled || isAccorionTitleSelected} />}
         {isMarkEnabled(sdk.field, MARKS.ITALIC) && <ToolbarItalicButton isDisabled={isDisabled} />}
 
         {isMarkEnabled(sdk.field, MARKS.UNDERLINE) && (
@@ -185,7 +186,7 @@ const Toolbar = ({ isDisabled }: ToolbarProps) => {
 
         <span className={styles.divider} />
 
-        <ToolbarAlignButton isDisabled={isDisabled} />
+        <ToolbarAlignButton isDisabled={isDisabled || isAccorionTitleSelected} />
 
         <ToolbarListButton isDisabled={isDisabled || !canInsertBlocks} />
 

@@ -1,7 +1,7 @@
 import isHotkey from 'is-hotkey';
 
 import { isBlockSelected } from '../../helpers/editor';
-import { withoutNormalizing, wrapNodes, unwrapNodes, isElement } from '../../internal';
+import { withoutNormalizing, insertNodes, unwrapNodes, isElement } from '../../internal';
 import { KeyboardHandler, HotkeyPlugin, PlateEditor } from '../../internal/types';
 import { BLOCKS } from '../../rich-text-types/src';
 import { TrackingPluginActions } from '../Tracking';
@@ -13,26 +13,27 @@ export function toggleAccordion(
 ): void {
   if (!editor.selection) return;
 
-  const isActive = isBlockSelected(editor, BLOCKS.ACCORDION);
+  const isTitleActive = isBlockSelected(editor, BLOCKS.ACCORDION_TITLE);
+  const isAccordionActive = isBlockSelected(editor, BLOCKS.ACCORDION);
 
-  logAction?.(isActive ? 'remove' : 'insert', { nodeType: BLOCKS.ACCORDION });
+  logAction?.(isTitleActive || isAccordionActive ? 'remove' : 'insert', { nodeType: BLOCKS.ACCORDION });
 
   withoutNormalizing(editor, () => {
     if (!editor.selection) return;
 
     unwrapNodes(editor, {
-      match: (node) => isElement(node) && node.type === BLOCKS.ACCORDION,
-      split: true,
+      match: (node) => {console.log(node); return isElement(node) && node.type === BLOCKS.ACCORDION},
+      split: false
     });
 
-    if (!isActive) {
+    if (!isTitleActive && !isAccordionActive) {
       const accordion = {
         type: BLOCKS.ACCORDION,
         data: {},
         children: defaultAccordionChildren,
       };
 
-      wrapNodes(editor, accordion);
+      insertNodes(editor, accordion);
     }
   });
 }

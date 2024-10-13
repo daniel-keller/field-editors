@@ -1,13 +1,15 @@
 
-// import { transformLift, transformUnwrap } from '../../helpers/transformers';
 import { transformParagraphs, transformLift } from '../../helpers/transformers';
 import { PlatePlugin } from '../../internal/types';
 import { BLOCKS, CONTAINERS } from '../../rich-text-types/src';
 import Accordion from './components/Accordion';
 import AccordionTitle from './components/AccordionTitle';
-import { shouldResetAccordionOnBackspace } from './shouldResetAccordion';
-import { onKeyDownToggleAccordion, toggleAccordion } from './toggleAccordion';
-import { firstNodeIsTitle, hasAccorionAsDirectParent, insertTitleAndParagraphAsChild, isNonEmptyAccordion, insertTitle } from './utils';
+import { onKeyDownToggleAccordion } from './toggleAccordion';
+import {
+  accordionHasTitle,
+  unwrapAccordion,
+  hasAccorionAsDirectParent
+} from './utils';
 
 export const createAccordionTitlePlugin = (): PlatePlugin => ({
   key: BLOCKS.ACCORDION_TITLE,
@@ -16,6 +18,7 @@ export const createAccordionTitlePlugin = (): PlatePlugin => ({
   component: AccordionTitle,
   normalizer: [
     {
+      // Transform Titles without Accordions
       match: {type: BLOCKS.ACCORDION_TITLE},
       validNode: hasAccorionAsDirectParent,
       transform: transformParagraphs,
@@ -50,7 +53,7 @@ export const createAccordionPlugin = (): PlatePlugin => ({
   handlers: {
     onKeyDown: onKeyDownToggleAccordion,
   },
-  // TODO: determine the best way to identify accordion
+  // TODO: determine the best way to identify html accordion
   // deserializeHtml: {
   //   rules: [
   //     {
@@ -64,65 +67,11 @@ export const createAccordionPlugin = (): PlatePlugin => ({
       validChildren: CONTAINERS[BLOCKS.ACCORDION],
       transform: transformLift,
     },
-    // No empty accordions
+    // Unwrap Accordion without title
     {
       match: {type: BLOCKS.ACCORDION},
-      validNode: isNonEmptyAccordion,
-      transform: insertTitleAndParagraphAsChild,
-    },
-    // Accordion title must be first
-    {
-      match: {type: BLOCKS.ACCORDION},
-      validNode: firstNodeIsTitle,
-      transform: insertTitle,
-    },
-
-    // {
-    //   match: [BLOCKS.ACCORDION_TITLE],
-    //   validNode: hasAccorionAsDirectParent,
-    //   transform: transformParagraphs,
-    // },
-  ],
-  resetNode: [
-    {
-      // toggle off blockquote on backspace when it's empty
-      hotkey: 'backspace',
-      types: [BLOCKS.ACCORDION_TITLE],
-      predicate: shouldResetAccordionOnBackspace,
-      onReset: toggleAccordion,
+      validNode: accordionHasTitle,
+      transform: unwrapAccordion,
     },
   ],
-  // overrideByKey: {
-  //   [BLOCKS.ACCORDION_TITLE]: {
-  //     type: BLOCKS.ACCORDION_TITLE,
-  //     component: AccordionTitle,
-  //     // @ts-expect-error
-  //     normalizer: [
-  //       {
-  //         validNode: hasAccorionAsDirectParent,
-  //         transform: transformParagraphs,
-  //       },
-  //     ],
-  //   },
-  //   [BLOCKS.ACCORDION]: {
-  //     type: BLOCKS.ACCORDION,
-  //     component: Accordion,
-  //     // normalizer: [
-  //     //   // Only valid children
-  //     //   {
-  //     //     validChildren: CONTAINERS[BLOCKS.ACCORDION],
-  //     //     transform: transformLift,
-  //     //   },
-  //     //   // No empty accordions
-  //     //   {
-  //     //     validNode: isNonEmptyAccordion,
-  //     //     transform: insertTitleAndParagraphAsChild,
-  //     //   },
-  //     //   {
-  //     //     validNode: firstNodeIsTitle,
-  //     //     transform: insertTitle,
-  //     //   },
-  //     // ],
-  //   },
-  // },
 });
