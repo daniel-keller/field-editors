@@ -9,6 +9,9 @@ export type RichTextTrackingActionName =
   // Marks
   | 'mark'
   | 'unmark'
+  // Accordion
+  | 'removeAccordion'
+  | 'insertAccordion'
   // Columns
   | 'insertColumns'
   // Tables

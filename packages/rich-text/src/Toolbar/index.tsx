@@ -28,6 +28,7 @@ import {
   ToolbarDropdownSuperscriptButton,
   ToolbarSuperscriptButton,
 } from '../plugins/Marks/Superscript';
+import { ToolbarAccordionButton } from '../plugins/Accordion';
 import { ToolbarUnderlineButton } from '../plugins/Marks/Underline';
 import { ToolbarQuoteButton } from '../plugins/Quote';
 import { ToolbarTableButton } from '../plugins/Table';
@@ -196,11 +197,17 @@ const Toolbar = ({ isDisabled }: ToolbarProps) => {
         {isNodeTypeEnabled(sdk.field, BLOCKS.HR) && (
           <ToolbarHrButton isDisabled={isDisabled || !canInsertBlocks} />
         )}
+        {isNodeTypeEnabled(sdk.field, BLOCKS.TABLE) && (
+          <ToolbarTableButton isDisabled={shouldDisableTables} />
+        )}
+
+        <span className={styles.divider} />
+
         {isNodeTypeEnabled(sdk.field, BLOCKS.COLUMN) && (
           <ToolbarColumnButton isDisabled={shouldDisableTables} />
         )}
-        {isNodeTypeEnabled(sdk.field, BLOCKS.TABLE) && (
-          <ToolbarTableButton isDisabled={shouldDisableTables} />
+        {isNodeTypeEnabled(sdk.field, BLOCKS.ACCORDION) && (
+          <ToolbarAccordionButton isDisabled={shouldDisableTables} />
         )}
       </div>
       <div className={styles.embedActionsWrapper}>

@@ -1,37 +1,31 @@
 import * as React from 'react';
 
-// import { Form, TextInput } from '@contentful/f36-components';
 import { css } from 'emotion';
+import tokens from '@contentful/f36-tokens';
+import { useSelected } from 'slate-react';
 
-// import { useContentfulEditor } from '../../../ContentfulEditorProvider';
-// import { getNodeEntryFromSelection } from '../../../helpers/editor';
-import { RenderElementProps } from '../../../internal';
-// import { BLOCKS } from '../../../rich-text-types/src';
-
-const quote = css({
-  margin: '0 0 1.3125rem',
-  border: '1px solid darkgray',
-  padding: '10px',
-  borderRadius: '5px',
-  fontStyle: 'normal',
-});
+import { useContentfulEditor } from '../../../ContentfulEditorProvider';
+import { isSelectionAtBlockStart, RenderElementProps } from '../../../internal';
+import { BLOCKS } from '../../../rich-text-types/src';
 
 export default function Accordion(props: RenderElementProps) {
-//   const { element, attributes, children } = props;
-//   const editor = useContentfulEditor();
+  const editor = useContentfulEditor();
+  const startOfAnySelected = isSelectionAtBlockStart(editor, {
+    match: (n) => n.type == BLOCKS.ACCORDION
+  });
+  const thisStartSelected = useSelected() && startOfAnySelected;
 
-//   const [attribution, setAttribution] = React.useState<string | undefined>(element.data.attribution);
-
-//   const changeAttribution = (e) => {
-//     setAttribution(e.target.value);
-//     const [,path] = getNodeEntryFromSelection(editor, BLOCKS.QUOTE);
-
-//     const attribution = e.target.value ? e.target.value : undefined;
-//     setNodes(editor, {data: {...element.data, attribution }}, { at: path});
-//   }
+  const accordion = css({
+    margin: '0 0 1.3125rem',
+    border: `1px solid ${thisStartSelected ? tokens.blue600 : 'darkgray'}`,
+    backgroundColor: `${thisStartSelected ? tokens.blue100 : 'initial'}`,
+    padding: '10px',
+    borderRadius: '5px',
+    fontStyle: 'normal',
+  });
 
   return (
-    <div {...props.attributes} className={quote}>
+    <div {...props.attributes} className={accordion}>
       {props.children}
     </div>
   );

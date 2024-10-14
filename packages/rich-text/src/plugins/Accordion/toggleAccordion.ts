@@ -5,7 +5,6 @@ import { withoutNormalizing, insertNodes, unwrapNodes, isElement } from '../../i
 import { KeyboardHandler, HotkeyPlugin, PlateEditor } from '../../internal/types';
 import { BLOCKS } from '../../rich-text-types/src';
 import { TrackingPluginActions } from '../Tracking';
-import { defaultAccordionChildren } from './utils';
 
 export function toggleAccordion(
   editor: PlateEditor,
@@ -16,7 +15,7 @@ export function toggleAccordion(
   const isTitleActive = isBlockSelected(editor, BLOCKS.ACCORDION_TITLE);
   const isAccordionActive = isBlockSelected(editor, BLOCKS.ACCORDION);
 
-  logAction?.(isTitleActive || isAccordionActive ? 'remove' : 'insert', { nodeType: BLOCKS.ACCORDION });
+  logAction?.(isTitleActive || isAccordionActive ? 'removeAccordion' : 'insertAccordion', { nodeType: BLOCKS.ACCORDION });
 
   withoutNormalizing(editor, () => {
     if (!editor.selection) return;
@@ -30,7 +29,16 @@ export function toggleAccordion(
       const accordion = {
         type: BLOCKS.ACCORDION,
         data: {},
-        children: defaultAccordionChildren,
+        children: [
+          {
+            type: BLOCKS.ACCORDION_TITLE,
+            children: [{ text: 'Untitled' }],
+          },
+          {
+            type: BLOCKS.PARAGRAPH,
+            children: [{ text: '' }],
+          }
+        ],
       };
 
       insertNodes(editor, accordion);

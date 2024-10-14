@@ -8,17 +8,6 @@ import {
 } from '../../internal';
 import { BLOCKS } from '../../rich-text-types/src';
 
-export const defaultAccordionChildren = [
-  {
-    type: BLOCKS.ACCORDION_TITLE,
-    children: [{ text: 'Untitled' }],
-  },
-  {
-    type: BLOCKS.PARAGRAPH,
-    children: [{ text: '' }],
-  }
-];
-
 export const hasAccorionAsDirectParent = (editor: PlateEditor, [, path]: NodeEntry) => {
   const [parentNode] = (getParentNode(editor, path) || []) as NodeEntry;
   return parentNode.type == BLOCKS.ACCORDION && isFirstChild(path);
