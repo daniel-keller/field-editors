@@ -2,7 +2,7 @@ import { getNodeEntryFromSelection } from '../../../helpers/editor';
 import { setNodes, isElement, getChildren } from '../../../internal';
 import { BLOCKS } from '../../../rich-text-types/src';
 
-export function setColumnWidth(editor, groupPathRef, layout) {
+export function setColumnStyle(editor, groupPathRef, layout, variant?: string, alignItems?: string) {
   const path = groupPathRef.unref();
   const columnGroup = getNodeEntryFromSelection(editor, BLOCKS.COLUMN_GROUP, path);
 
@@ -15,10 +15,15 @@ export function setColumnWidth(editor, groupPathRef, layout) {
 
   childPaths.forEach((item, index) => {
     const width = layout[index] + '%';
+
+    const data: any = { width };
+    if (variant) data.variant = variant;
+    if (alignItems) data.alignItems = alignItems;
+
     if (!width) return;
     setNodes(
       editor,
-      { width },
+      data,
       {
         at: item,
         match: (n) => isElement(n) && n.type === BLOCKS.COLUMN,

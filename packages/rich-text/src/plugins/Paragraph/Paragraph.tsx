@@ -18,6 +18,9 @@ export function Paragraph(props: RenderAlignableElementProps) {
       margin-bottom: 1.5em;
       direction: inherit;
       text-align: ${props.element.data?.align ?? 'initial'};
+      &:only-child {
+        margin-bottom: 0;
+      }
     `,
   };
 

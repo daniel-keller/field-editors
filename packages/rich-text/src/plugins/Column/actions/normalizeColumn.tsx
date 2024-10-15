@@ -2,12 +2,15 @@ import { isElement, getLastChildPath, createPathRef } from '../../../internal';
 import { BLOCKS } from '../../../rich-text-types/src';
 import { insertEmptyColumn } from './insertEmpty';
 import { moveMiddleColumn } from './moveMiddleColumn';
-import { setColumnWidth } from './setColumnWidth';
+import { setColumnStyle } from './setColumnStyle';
 
 const normalizeColumnHelper = (editor, entry) => {
   const [node, path] = entry;
   const prevChildrenCnt = node.children.length;
   const currentLayout = node.data.layout;
+  const variant = node.data.variant;
+  const alignItems = node.data.alignItems;
+
   if (!currentLayout) return;
 
   const currentChildrenCnt = currentLayout.length;
@@ -50,7 +53,7 @@ const normalizeColumnHelper = (editor, entry) => {
     }
   }
 
-  setColumnWidth(editor, groupPathRef, currentLayout);
+  setColumnStyle(editor, groupPathRef, currentLayout, variant, alignItems);
 };
 
 export function normalizeColumn(editor) {

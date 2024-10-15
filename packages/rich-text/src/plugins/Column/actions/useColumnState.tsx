@@ -29,8 +29,11 @@ export function useColumnState() {
   const setDoubleSideDoubleColumn = () => {
     setNodes(editor, { data: { ...data, layout: [25, 50, 25] } }, { at: columnPath });
   };
-  const setGap = (gap: number) => {
-    setNodes(editor, { data: { ...data, gap: gap } }, { at: columnPath });
+  const setStyle = (style: string) => {
+    setNodes(editor, { data: { ...data, variant: style } }, { at: columnPath });
+  };
+  const setVertAlignment = (align: string) => {
+    setNodes(editor, { data: { ...data, alignItems: align } }, { at: columnPath });
   };
 
   return {
@@ -40,6 +43,7 @@ export function useColumnState() {
     setLeftSideDoubleColumn,
     setRightSideDoubleColumn,
     setThreeColumn,
-    setGap,
+    setStyle,
+    setVertAlignment
   };
 }

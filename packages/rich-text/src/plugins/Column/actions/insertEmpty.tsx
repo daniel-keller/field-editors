@@ -20,7 +20,7 @@ export function insertColumnGroup(editor) {
   withoutNormalizing(editor, () => {
     insertNodes(editor, {
       type: BLOCKS.COLUMN_GROUP,
-      data: { layout: [50, 50], gap: 2 },
+      data: { layout: [50, 50]},
       children: [
         {
           type: BLOCKS.COLUMN,

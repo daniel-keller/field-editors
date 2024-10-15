@@ -1,48 +1,33 @@
 import React from 'react';
 
-import { Menu, Button, Popover } from '@contentful/f36-components';
-import { DeleteIcon, ChevronDownIcon } from '@contentful/f36-icons';
+import { Button, Popover } from '@contentful/f36-components';
+import { DeleteIcon } from '@contentful/f36-icons';
 import { PlateElement, useElement } from '@udecode/plate-common';
 import type { TColumnElement } from '@udecode/plate-layout';
 import { withRef } from '@udecode/react-utils';
 import { css } from 'emotion';
 
-import { useContentfulEditor, useContentfulEditorRef } from '../../../ContentfulEditorProvider';
-import { getElementFromCurrentSelection } from '../../../helpers/editor';
-import { removeNodes, findNodePath, Element } from '../../../internal';
+import { useContentfulEditorRef } from '../../../ContentfulEditorProvider';
+import { removeNodes, findNodePath } from '../../../internal';
 import { BLOCKS } from '../../../rich-text-types/src';
 import { useColumnState } from '../actions/useColumnState';
 import { useDebouncePopoverOpen } from '../actions/useDebouncePopoverOpen';
+import { ColumnStyleButton } from './ColumnStyleButton';
 
 
 
-const styles = {
-  itemButton: css({
-    minWidth: 'unset',
-  }),
-  menuButton: css`
-    padding-left: 5px;
-    padding-right: 5px;
-    span {
-      display: flex;
-      align-content: center;
-      align-items: center;
-    }
-  `,
-};
+const group = css`
+  display: flex;
+  width: 100%;
+  height: 100%;
+  gap: 1em;
+  margin-top: 0.5rem;
+  margin-bottom: 1em;
+  align-items: stretch;
+`;
+
 
 export const ColumnGroupElement = withRef<typeof PlateElement>(({ children, ...props }, ref) => {
-  const data: any = props.element.data;
-  const spacing = data?.gap ? 0.5 * data.gap : 0.5;
-
-  const group = css`
-    display: flex;
-    width: 100%;
-    height: 100%;
-    gap: ${spacing}em;
-    margin-top: 0.5rem;
-    margin-bottom: ${spacing}em;
-  `;
 
   return (
     <PlateElement ref={ref} {...props}>
@@ -68,33 +53,7 @@ const useRemoveNodeButton = ({ element }) => {
   };
 };
 
-const gaps = [1, 2, 3, 4];
-
 export function ColumnFloatingToolbar({ children }: { children: React.ReactNode }) {
-  const editor = useContentfulEditor();
-  const [isGapOpen, setGapOpen] = React.useState(false);
-  const [selected, setSelected] = React.useState<number>(gaps[1]);
-
-  React.useEffect(() => {
-    if (!editor?.selection) return;
-
-    const elements = getElementFromCurrentSelection(editor);
-
-    // Iterate through the elements to identify matches
-    // In lists it would otherwise never show the correct block.
-    for (const element of elements) {
-      if (typeof element === 'object' && 'type' in element) {
-        const el = element as Element;
-
-        if (el.data?.gap) {
-          return setSelected(el.data?.gap as number);
-        }
-      }
-    }
-
-    setSelected(gaps[1]);
-  }, [editor, editor?.operations, editor?.selection]);
-
   const {
     setSingleColumn,
     setDoubleColumn,
@@ -102,19 +61,12 @@ export function ColumnFloatingToolbar({ children }: { children: React.ReactNode 
     setLeftSideDoubleColumn,
     setRightSideDoubleColumn,
     setThreeColumn,
-    setGap,
+    setStyle,
+    setVertAlignment
   } = useColumnState();
 
   const element = useElement<TColumnElement>(BLOCKS.COLUMN);
   const { props: buttonProps } = useRemoveNodeButton({ element });
-
-  function handleOnSelectItem(gap: number): (event: React.MouseEvent<HTMLButtonElement>) => void {
-    return () => {
-      setSelected(gap);
-      setGap(gap);
-    };
-  }
-
   const isOpen = useDebouncePopoverOpen();
 
   return (
@@ -122,6 +74,7 @@ export function ColumnFloatingToolbar({ children }: { children: React.ReactNode 
       <Popover.Trigger>{children}</Popover.Trigger>
       <Popover.Content>
         <div>
+          {/* Layout */}
           <Button size="small" variant="transparent" onClick={setSingleColumn}>
             <svg
               width="16px"
@@ -218,48 +171,8 @@ export function ColumnFloatingToolbar({ children }: { children: React.ReactNode 
             </svg>
           </Button>
 
-          <Menu isOpen={isGapOpen} onClose={() => setGapOpen(false)}>
-            <Menu.Trigger>
-              <Button
-                size="small"
-                variant="transparent"
-                endIcon={<ChevronDownIcon />}
-                onClick={() => setGapOpen(!isGapOpen)}
-                className={styles.menuButton}
-              >
-                <span>
-                  <svg
-                    width="16px"
-                    height="16px"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M6 12H18M6 12L8 9M6 12L8 15M18 12L16 9M18 12L16 15M21 21V3M3 21V3"
-                      stroke="#000000"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                  {selected}
-                </span>
-              </Button>
-            </Menu.Trigger>
-            <Menu.List>
-              {gaps.map((gap) => (
-                <Menu.Item
-                  key={gap}
-                  isInitiallyFocused={gap == gaps[1]}
-                  onClick={handleOnSelectItem(gap)}
-                  className={styles.itemButton}
-                >
-                  {gap}
-                </Menu.Item>
-              ))}
-            </Menu.List>
-          </Menu>
+          {/* Style */}
+          <ColumnStyleButton setStyle={setStyle} setAlignItems={setVertAlignment}/>
 
           <Button size="small" variant="transparent" {...buttonProps}>
             <DeleteIcon variant="negative" />

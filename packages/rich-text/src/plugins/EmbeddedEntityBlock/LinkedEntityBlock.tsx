@@ -240,7 +240,7 @@ export function LinkedEntityBlock(props: LinkedEntityBlockProps) {
                   content={
                     !imageFitCover
                       ? 'A focal point can only be chosen when image fit (above) is set to "cover"'
-                      : `Image will be focused on: {x: , y: }`
+                      : `Image will be focused on ${!point ? 'center' : 'x: '+ point?.x +', y: ' + point?.y}`
                   }
                 >
                   <IconButton
