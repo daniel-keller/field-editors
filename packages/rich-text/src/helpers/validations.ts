@@ -38,7 +38,8 @@ const isFormattingOptionEnabled = (field, validationType, nodeTypeOrMark) => {
   return DEFAULT_ENABLED_NODE_TYPES.concat(enabledFormattings).includes(nodeTypeOrMark);
 };
 
-export const isNodeTypeEnabled = (field: FieldAppSDK['field'], nodeType): boolean =>
+export const isNodeTypeEnabled = (field: FieldAppSDK['field'], nodeType, restrictedBlocks: string[] = []): boolean =>
+  !restrictedBlocks?.includes(nodeType) &&
   isFormattingOptionEnabled(field, VALIDATIONS.ENABLED_NODE_TYPES, nodeType);
 
 export const isMarkEnabled = (field: FieldAppSDK['field'], mark) =>

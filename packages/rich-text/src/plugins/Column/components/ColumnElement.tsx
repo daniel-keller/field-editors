@@ -18,33 +18,33 @@ const columns: any = {
 };
 
 interface TStyledColumnElement extends TColumnElement {
-  alignItems?: string
-  variant?: string
+  align?: string
+  style?: string
 }
 
 export const ColumnElement = withHOC(
   ResizableProvider,
   withRef<typeof PlateElement>(({ children, ...props }, ref) => {
-    const { width, variant, alignItems } = useElement<TStyledColumnElement>();
+    const { width, style, align } = useElement<TStyledColumnElement>();
 
-    // variant
-    if (!variant || variant == 'text') {
+    // style
+    if (!style || style == 'text') {
       columns.border = '1px dashed darkgray !important';
       columns.backgroundColor = 'unset';
-    } else if (variant == 'outlined') {
+    } else if (style == 'outlined') {
       columns.border = '1px solid darkgray !important';
       columns.backgroundColor = 'unset';
-    } else if (variant == 'filled') {
+    } else if (style == 'filled') {
       columns.border = 'none';
       columns.backgroundColor = tokens.gray200;
     }
 
     // align
-    if (alignItems == 'center') {
+    if (align == 'center') {
       columns.justifyContent = 'center'
-    } else if (alignItems == 'top') {
+    } else if (align == 'top') {
       columns.justifyContent = 'start'
-    } else if (alignItems == 'bottom') {
+    } else if (align == 'bottom') {
       columns.justifyContent = 'end'
     }
 

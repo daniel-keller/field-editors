@@ -62,11 +62,14 @@
     },
     "TopLevelBlockEnum": {
       "enum": [
+        "accordion",
+        "asset-gallery",
         "blockquote",
         "column-group",
         "embedded-asset-block",
         "embedded-entry-block",
         "embedded-resource-block",
+        "fillout",
         "heading-1",
         "heading-2",
         "heading-3",
@@ -74,6 +77,7 @@
         "heading-5",
         "heading-6",
         "hr",
+        "iframe",
         "ordered-list",
         "paragraph",
         "table",
@@ -139,7 +143,13 @@
         "table",
         "table-row",
         "table-cell",
-        "table-header-cell"
+        "table-header-cell",
+        "accordion",
+        "accordion-title",
+        "accordion-body",
+        "asset-gallery",
+        "iframe",
+        "fillout"
       ]
     },
     "Inline": {

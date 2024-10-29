@@ -2,8 +2,9 @@ import { FieldAppSDK } from '@contentful/app-sdk';
 import { PlateProps } from '@udecode/plate-common';
 
 import { PlatePlugin } from '../internal/types';
-import { createAccordionPlugin, createAccordionTitlePlugin } from './Accordion';
+import { createAccordionPlugin, createAccordionTitlePlugin, createAccordionBodyPlugin } from './Accordion';
 import { createAlignPlugin } from './Align';
+import { createAssetGalleryPlugin } from './AssetGallery';
 import { createSoftBreakPlugin, createExitBreakPlugin, createResetNodePlugin } from './Break';
 import { createColumnPlugin } from './Column';
 import { createCommandPalettePlugin } from './CommandPalette';
@@ -35,6 +36,8 @@ import { createTextPlugin } from './Text';
 import { createTrackingPlugin, RichTextTrackingActionHandler } from './Tracking';
 import { createTrailingParagraphPlugin } from './TrailingParagraph';
 import { createVoidsPlugin } from './Voids';
+import { createIFramePlugin } from './IFrame';
+import { createFilloutFormPlugin } from './FilloutForm';
 
 export const getPlugins = (
   sdk: FieldAppSDK,
@@ -61,12 +64,16 @@ export const getPlugins = (
   createQuotePlugin(),
   createAccordionPlugin(),
   createAccordionTitlePlugin(),
+  createAccordionBodyPlugin(),
   createColumnPlugin(),
   createTablePlugin(),
   createAlignPlugin(),
   createEmbeddedEntryBlockPlugin(sdk),
   createEmbeddedAssetBlockPlugin(sdk),
   createEmbeddedResourceBlockPlugin(sdk),
+  createAssetGalleryPlugin(),
+  createIFramePlugin(),
+  createFilloutFormPlugin(),
 
   // Inline elements
   createHyperlinkPlugin(sdk),

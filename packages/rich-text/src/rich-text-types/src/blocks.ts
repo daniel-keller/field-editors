@@ -32,5 +32,10 @@ export enum BLOCKS {
   TABLE_HEADER_CELL = 'table-header-cell',
 
   ACCORDION = 'accordion',
-  ACCORDION_TITLE = 'accordion-title'
+  ACCORDION_TITLE = 'accordion-title',
+  ACCORDION_BODY = 'accordion-body',
+
+  ASSET_GALLERY = 'asset-gallery',
+  IFRAME = 'iframe',
+  FILLOUT_FORM = 'fillout'
 }

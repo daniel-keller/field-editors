@@ -11,22 +11,7 @@
           ]
         },
         "data": {
-          "type": "object",
-          "properties": {
-            "layout": {
-              "type": "array",
-              "items": {
-                "type": "number"
-              }
-            },
-            "gap": {
-              "type": "number"
-            }
-          },
-          "additionalProperties": false,
-          "required": [
-            "layout"
-          ]
+          "typeof": "function"
         },
         "content": {
           "minItems": 1,
@@ -53,21 +38,13 @@
           ]
         },
         "data": {
-          "type": "object",
-          "properties": {}
+          "typeof": "function"
         },
         "content": {
           "minItems": 1,
           "type": "array",
           "items": {
-            "anyOf": [
-              {
-                "$ref": "#/definitions/Block"
-              },
-              {
-                "$ref": "#/definitions/Inline"
-              }
-            ]
+            "$ref": "#/definitions/Paragraph"
           }
         }
       },
@@ -78,19 +55,22 @@
         "nodeType"
       ]
     },
-    "Block": {
+    "Paragraph": {
       "type": "object",
       "properties": {
         "nodeType": {
-          "$ref": "#/definitions/BLOCKS"
+          "type": "string",
+          "enum": [
+            "paragraph"
+          ]
+        },
+        "data": {
+          "typeof": "function"
         },
         "content": {
           "type": "array",
           "items": {
             "anyOf": [
-              {
-                "$ref": "#/definitions/Block"
-              },
               {
                 "$ref": "#/definitions/Inline"
               },
@@ -99,9 +79,6 @@
               }
             ]
           }
-        },
-        "data": {
-          "$ref": "#/definitions/NodeData"
         }
       },
       "additionalProperties": false,
@@ -109,34 +86,6 @@
         "content",
         "data",
         "nodeType"
-      ]
-    },
-    "BLOCKS": {
-      "description": "Map of all Contentful block types. Blocks contain inline or block nodes.",
-      "type": "string",
-      "enum": [
-        "document",
-        "paragraph",
-        "heading-1",
-        "heading-2",
-        "heading-3",
-        "heading-4",
-        "heading-5",
-        "heading-6",
-        "ordered-list",
-        "unordered-list",
-        "list-item",
-        "hr",
-        "blockquote",
-        "embedded-entry-block",
-        "embedded-asset-block",
-        "embedded-resource-block",
-        "column",
-        "column-group",
-        "table",
-        "table-row",
-        "table-cell",
-        "table-header-cell"
       ]
     },
     "Inline": {

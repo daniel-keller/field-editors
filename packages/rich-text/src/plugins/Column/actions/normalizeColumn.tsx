@@ -8,8 +8,8 @@ const normalizeColumnHelper = (editor, entry) => {
   const [node, path] = entry;
   const prevChildrenCnt = node.children.length;
   const currentLayout = node.data.layout;
-  const variant = node.data.variant;
-  const alignItems = node.data.alignItems;
+  const style = node.data.style;
+  const align = node.data.align;
 
   if (!currentLayout) return;
 
@@ -53,7 +53,7 @@ const normalizeColumnHelper = (editor, entry) => {
     }
   }
 
-  setColumnStyle(editor, groupPathRef, currentLayout, variant, alignItems);
+  setColumnStyle(editor, groupPathRef, currentLayout, style, align);
 };
 
 export function normalizeColumn(editor) {

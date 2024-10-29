@@ -1,12 +1,13 @@
 import * as React from 'react';
 
 import { Asset } from '@contentful/app-sdk';
+import { IconButton, Stack, ToggleButton, Tooltip } from '@contentful/f36-components';
 import { EntityLink } from '@contentful/field-editor-reference';
 import { css } from 'emotion';
 import { useReadOnly, useSelected } from 'slate-react';
 
 import { useContentfulEditor } from '../../ContentfulEditorProvider';
-import { findNodePath, getText, isEditorReadOnly } from '../../internal/queries';
+import { findNodePath, isEditorReadOnly } from '../../internal/queries';
 import { removeNodes, setNodes } from '../../internal/transforms';
 import { Element, RenderElementProps } from '../../internal/types';
 import { useSdkContext } from '../../SdkProvider';
@@ -14,15 +15,19 @@ import { useLinkTracking } from '../links-tracking';
 import { FetchingWrappedAssetCard } from '../shared/FetchingWrappedAssetCard';
 import { FetchingWrappedEntryCard } from '../shared/FetchingWrappedEntryCard';
 import { LinkedBlockWrapper } from '../shared/LinkedBlockWrapper';
-import { IconButton, Stack, ToggleButton, Tooltip } from '@contentful/f36-components';
-import { BLOCKS } from 'rich-text-types/src';
-import { getNodeEntryFromSelection } from '../../helpers/editor';
 import { setFocalPointForAsset, Point } from '../../focal-point-picker/components/FocalPointDialog';
+import { setRichTextCaption } from '../shared/RichTextCaptionDialog';
+import { TopLevelBlock } from '../../rich-text-types/src';
+import { isEmptyNode } from '../shared/EmbeddedBlockUtil';
 
 type LinkedEntityBlockProps = {
   element: Element & {
     data: {
       target: EntityLink;
+      focus?: Point;
+      blur?: string;
+      fit?: string;
+      caption?: TopLevelBlock[];
     };
   };
   attributes: Pick<RenderElementProps, 'attributes'>;
@@ -31,33 +36,6 @@ type LinkedEntityBlockProps = {
 
 const toggle = css`
   padding: 0.25rem 0.25rem;
-`;
-
-const caption = css`
-  background-color: #e3e3e3;
-  border-bottom-right-radius: 5px;
-  border-bottom-left-radius: 6px;
-  padding: 5px;
-  & #caption-header {
-    border-bottom: 1px solid grey;
-    margin-bottom: 5px;
-  }
-`;
-
-const addCaptionWrapper = css `
-  position: relative;
-`;
-
-const addCaption = css`
-  position: absolute;
-  pointer-events: none;
-  top: 0;
-  left: 0;
-  background-color: #e3e3e3;
-  border-bottom-right-radius: 5px;
-  border-bottom-left-radius: 5px;
-  padding-left: 10px;
-  padding-right: 10px;
 `;
 
 const wrapperBlur = css`
@@ -80,7 +58,7 @@ export function LinkedEntityBlock(props: LinkedEntityBlockProps) {
   const sdk = useSdkContext();
   const isDisabled = useReadOnly();
   const { id: entityId, linkType: entityType } = element.data.target.sys;
-  const { focus, blur, fit } = element.data;
+  const { focus, blur, fit, caption } = element.data;
 
   const [point, setPoint] = React.useState<Point | undefined>(focus as Point | undefined);
   const [loadedAsset, setLoadedAsset] = React.useState<Asset | null>();
@@ -128,23 +106,21 @@ export function LinkedEntityBlock(props: LinkedEntityBlockProps) {
     removeNodes(editor, { at: pathToElement });
   }, [editor, element]);
 
-  // When to Show caption text
-  const showCaption = React.useCallback(() => {
-    if (!editor) return;
-    const pathToElement = findNodePath(editor, element);
-    if (pathToElement) {
-      // Show caption is node is selected
-      const [, pathToSelectedElement] = getNodeEntryFromSelection(editor, BLOCKS.EMBEDDED_ASSET);
-      const currentlySelected = JSON.stringify(pathToElement) == JSON.stringify(pathToSelectedElement);
+  // set caption
+  const setCaption = React.useCallback(async () => {
+    const value = await setRichTextCaption(sdk, caption) as TopLevelBlock[] | undefined;
+    const path = findNodePath(editor, element);
+    const isEmpty = isEmptyNode(value);
+    setNodes(editor, {data: {...element.data, caption: isEmpty ? undefined : value}}, { at: path });
+  }, [editor, element, caption, sdk]);
 
-      // or if text in node is not empty
-      const currentText = getText(editor, pathToElement);
-      return currentText.trim() != '' || currentlySelected;
-    }
-    return false;
-  }, [editor, element]);
+  const hasCaption = React.useMemo(() => {
+    return !isEmptyNode(caption);
+  }, [caption])
 
-  // Open FocalPoint dialog after if asset is loaded
+  /**
+   * Open FocalPoint dialog after if asset is loaded
+   */
   const openFocalPoint = React.useCallback(async () => {
     if (loadedAsset) {
       const focus = await setFocalPointForAsset(sdk, loadedAsset, point) as Point | undefined;
@@ -159,7 +135,7 @@ export function LinkedEntityBlock(props: LinkedEntityBlockProps) {
   }
 
   const wrapper = {
-    'text-align': 'center',
+    textAlign: 'center' as const,
     borderRadius: '5px',
     backgroundImage: `linear-gradient(
       45deg,
@@ -217,7 +193,7 @@ export function LinkedEntityBlock(props: LinkedEntityBlockProps) {
               <Stack flexDirection='column'>
                 {/* Image fit */}
                 <Tooltip placement="right"
-                  id="tooltip-1"
+                  id="tooltip-fit"
                   content={imageFitCover ? 'Image will cover the container' : 'Image will be contained in the container'}
                 >
                   <ToggleButton
@@ -236,7 +212,7 @@ export function LinkedEntityBlock(props: LinkedEntityBlockProps) {
                 </Tooltip>
                 {/* Focal point */}
                 <Tooltip placement="right"
-                  id="tooltip-1"
+                  id="tooltip-point"
                   content={
                     !imageFitCover
                       ? 'A focal point can only be chosen when image fit (above) is set to "cover"'
@@ -254,7 +230,7 @@ export function LinkedEntityBlock(props: LinkedEntityBlockProps) {
                 </Tooltip>
                 {/* Blurred background */}
                 <Tooltip placement="right"
-                  id="tooltip-1"
+                  id="tooltip-background"
                   content={
                     imageFitCover
                       ? 'A blurred background can only be chosen when image fit (above) is set to "contain"'
@@ -269,6 +245,20 @@ export function LinkedEntityBlock(props: LinkedEntityBlockProps) {
                     icon={<svg width="24px" height="24px" viewBox="-2.4 -2.4 28.80 28.80" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#000000" strokeWidth="0.00024000000000000003" transform="rotate(0)matrix(1, 0, 0, 1, 0, 0)"><g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round" stroke="#CCCCCC" strokeWidth="0.336"></g><g id="SVGRepo_iconCarrier"> <path d="M5.99988 16.938V19.059L5.05851 20H2.93851L5.99988 16.938ZM22.0015 14.435V16.557L18.5595 20H17.9935L17.9939 18.443L22.0015 14.435ZM8.74988 14H15.2446C16.1628 14 16.9158 14.7071 16.9888 15.6065L16.9946 15.75V20H15.4946V15.75C15.4946 15.6317 15.4124 15.5325 15.3019 15.5066L15.2446 15.5H8.74988C8.63154 15.5 8.5324 15.5822 8.50648 15.6927L8.49988 15.75V20H6.99988V15.75C6.99988 14.8318 7.70699 14.0788 8.60636 14.0058L8.74988 14ZM8.02118 10.4158C8.08088 10.9945 8.26398 11.5367 8.54372 12.0154L1.99951 18.56V16.438L8.02118 10.4158ZM22.0015 9.932V12.055L17.9939 16.065L17.9946 15.75L17.9896 15.5825C17.9623 15.128 17.8246 14.7033 17.6029 14.3348L22.0015 9.932ZM12.0565 4L1.99951 14.06V11.939L9.93551 4H12.0565ZM22.0015 5.432V7.555L16.3346 13.2245C16.0672 13.1089 15.7779 13.0346 15.4746 13.0095L15.2446 13L14.6456 13.0005C14.9874 12.6989 15.2772 12.3398 15.4999 11.9384L22.0015 5.432ZM11.9999 7.00046C13.6567 7.00046 14.9999 8.34361 14.9999 10.0005C14.9999 11.6573 13.6567 13.0005 11.9999 13.0005C10.343 13.0005 8.99988 11.6573 8.99988 10.0005C8.99988 8.34361 10.343 7.00046 11.9999 7.00046ZM11.9999 8.50046C11.1715 8.50046 10.4999 9.17203 10.4999 10.0005C10.4999 10.8289 11.1715 11.5005 11.9999 11.5005C12.8283 11.5005 13.4999 10.8289 13.4999 10.0005C13.4999 9.17203 12.8283 8.50046 11.9999 8.50046ZM7.55851 4L1.99951 9.56V7.438L5.43751 4H7.55851ZM21.0565 4L15.9091 9.14895C15.7923 8.61022 15.5669 8.11194 15.2571 7.67816L18.9345 4H21.0565ZM16.5585 4L14.0148 6.54427C13.5362 6.26463 12.9942 6.08157 12.4157 6.02181L14.4365 4H16.5585Z" fill="#212121"></path> </g></svg>}
                     onToggle={() => updateBlur(!blurBackground)}
                     isDisabled={isReadOnly || imageFitCover}
+                  />
+                </Tooltip>
+                {/* Caption */}
+                <Tooltip placement="right"
+                  id="tooltip-caption"
+                  content='Edit caption'
+                >
+                  <ToggleButton
+                    className={toggle}
+                    isActive={hasCaption}
+                    aria-label='edit caption'
+                    size='small'
+                    icon={<svg width="24px" height="24px" fill="#000000" viewBox="0 0 256 256" id="Flat" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M128,20A108,108,0,1,0,236,128,108.12217,108.12217,0,0,0,128,20Zm0,192a84,84,0,1,1,84-84A84.0953,84.0953,0,0,1,128,212Zm41.59473-52.79a51.99951,51.99951,0,1,1,0-62.43066,12.0004,12.0004,0,0,1-19.1875,14.418,28.00025,28.00025,0,1,0,0,33.59521A12.00025,12.00025,0,0,1,169.59473,159.21Z"></path> </g></svg>}
+                    onToggle={setCaption}
                   />
                 </Tooltip>
               </Stack>
@@ -290,17 +280,7 @@ export function LinkedEntityBlock(props: LinkedEntityBlockProps) {
       }
       link={element.data.target}
     >
-      {showCaption() && <div className={caption}>
-        <div id='caption-header' contentEditable={false}><strong>Caption</strong></div>
-        {props.children}
-      </div>}
-
-      {!showCaption() && <div className={addCaptionWrapper}>
-        <div contentEditable={false} className={addCaption}>
-          <strong>Add Caption</strong>
-        </div>
-        {props.children}
-      </div>}
+      {props.children}
     </LinkedBlockWrapper>
   );
 }

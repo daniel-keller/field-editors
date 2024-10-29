@@ -8,18 +8,16 @@ import { RenderElementProps } from '../../../internal';
 
 const title = css({
   fontWeight: 'bold',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'space-between',
   borderBottom: '2px solid darkgrey'
 });
 
-
 export default function AccordionTitle(props: RenderElementProps) {
+
   return (
-    <div {...props.attributes} className={title}>
-      <div className={css`width: 100%`}>{props.children}</div>
-      <div contentEditable='false'><ChevronDownIcon/></div>
+    <div {...props.attributes}>
+      <div className={title}>
+        <div className={css`width: 100%`}>{props.children}</div>
+      </div>
     </div>
   );
 }

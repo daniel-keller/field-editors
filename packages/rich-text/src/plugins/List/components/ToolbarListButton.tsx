@@ -14,6 +14,7 @@ import { isListTypeActive } from '../utils';
 
 export interface ToolbarListButtonProps {
   isDisabled?: boolean;
+  restrictedBlocks?: string[];
 }
 
 export function ToolbarListButton(props: ToolbarListButtonProps) {
@@ -34,7 +35,7 @@ export function ToolbarListButton(props: ToolbarListButtonProps) {
 
   return (
     <React.Fragment>
-      {isNodeTypeEnabled(sdk.field, BLOCKS.UL_LIST) && (
+      {isNodeTypeEnabled(sdk.field, BLOCKS.UL_LIST, props.restrictedBlocks) && (
         <ToolbarButton
           title="UL"
           testId="ul-toolbar-button"
@@ -45,7 +46,7 @@ export function ToolbarListButton(props: ToolbarListButtonProps) {
           <ListBulletedIcon />
         </ToolbarButton>
       )}
-      {isNodeTypeEnabled(sdk.field, BLOCKS.OL_LIST) && (
+      {isNodeTypeEnabled(sdk.field, BLOCKS.OL_LIST, props.restrictedBlocks) && (
         <ToolbarButton
           title="OL"
           testId="ol-toolbar-button"

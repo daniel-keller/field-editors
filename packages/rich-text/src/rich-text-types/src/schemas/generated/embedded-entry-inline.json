@@ -11,16 +11,7 @@
           ]
         },
         "data": {
-          "type": "object",
-          "properties": {
-            "target": {
-              "$ref": "#/definitions/Link<\"Entry\">"
-            }
-          },
-          "additionalProperties": false,
-          "required": [
-            "target"
-          ]
+          "typeof": "function"
         },
         "content": {
           "maxItems": 0,
@@ -35,41 +26,6 @@
         "content",
         "data",
         "nodeType"
-      ]
-    },
-    "Link<\"Entry\">": {
-      "type": "object",
-      "properties": {
-        "sys": {
-          "type": "object",
-          "properties": {
-            "type": {
-              "type": "string",
-              "enum": [
-                "Link"
-              ]
-            },
-            "linkType": {
-              "type": "string",
-              "enum": [
-                "Entry"
-              ]
-            },
-            "id": {
-              "type": "string"
-            }
-          },
-          "additionalProperties": false,
-          "required": [
-            "id",
-            "linkType",
-            "type"
-          ]
-        }
-      },
-      "additionalProperties": false,
-      "required": [
-        "sys"
       ]
     },
     "Text": {

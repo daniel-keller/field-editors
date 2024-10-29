@@ -39,7 +39,16 @@ export type RichTextTrackingActionName =
   | 'cancelCreateEmbedDialog'
   // CommandPalette
   | 'openRichTextCommandPalette'
-  | 'cancelRichTextCommandPalette';
+  | 'cancelRichTextCommandPalette'
+  // Asset Gallery
+  | 'insertAssetGallery'
+  | 'removeAssetGallery'
+  // IFrame
+  | 'insertIFrame'
+  | 'removeIFrame'
+  // Fillout Form
+  | 'insertFillout'
+  | 'removeFillout';
 
 export type RichTextTrackingActionHandler = (
   name: RichTextTrackingActionName,

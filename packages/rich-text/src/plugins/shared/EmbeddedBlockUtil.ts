@@ -25,9 +25,32 @@ import {
   removeNodes,
   getChildren,
   NodeEntry,
+  // getLastChildPath,
 } from '../../internal';
-import { TEXT_CONTAINERS, BLOCKS } from '../../rich-text-types/src';
+import { TEXT_CONTAINERS, BLOCKS, VOID_BLOCKS, Text, Block, Inline } from '../../rich-text-types/src';
 import { TrackingPluginActions } from '../Tracking';
+
+
+const getLink = (entity) => {
+  return {
+    sys: {
+      id: entity.sys.id,
+      type: 'Link',
+      linkType: entity.sys.type,
+    },
+  };
+};
+
+const createNode = (nodeType, entity) => {
+  return {
+    type: nodeType,
+    data: {
+      target: nodeType === BLOCKS.EMBEDDED_RESOURCE ? entity : getLink(entity),
+    },
+    children: [{ text: '' }],
+    isVoid: true,
+  };
+};
 
 export function getWithEmbeddedBlockEvents(
   nodeType: BLOCKS.EMBEDDED_ENTRY | BLOCKS.EMBEDDED_ASSET | BLOCKS.EMBEDDED_RESOURCE,
@@ -64,15 +87,20 @@ export async function selectEntityAndInsert(
   nodeType,
   sdk,
   editor,
-  logAction: TrackingPluginActions['onToolbarAction'] | TrackingPluginActions['onShortcutAction']
+  logAction: TrackingPluginActions['onToolbarAction'] | TrackingPluginActions['onShortcutAction'],
+  selectManyAndReturn: boolean = false,
 ) {
   logAction('openCreateEmbedDialog', { nodeType });
 
   const { field, dialogs } = sdk;
   const baseConfig = newEntitySelectorConfigFromRichTextField(field, nodeType);
+
   const selectEntity = baseConfig.entityType === 'Asset'
-    ? dialogs.selectSingleAsset
+    ? selectManyAndReturn
+      ? dialogs.selectMultipleAssets
+      : dialogs.selectSingleAsset
     : dialogs.selectSingleEntry;
+
 
   const config = { ...baseConfig, withCreate: true };
 
@@ -82,7 +110,13 @@ export async function selectEntityAndInsert(
 
   if (!entity) {
     logAction('cancelCreateEmbedDialog', { nodeType });
+    if (selectManyAndReturn) return null;
   } else {
+    if (selectManyAndReturn) {
+      let entities: any[] = entity;
+      if (!Array.isArray(entity)) entities = [entity];
+      return entities.map(e => createNode(nodeType, e));
+    }
     // Selection prevents incorrect position of inserted ref when RTE doesn't have focus
     // (i.e. when using hotkeys and slide-in)
     select(editor, selection);
@@ -97,6 +131,22 @@ export async function selectEntityAndInsert(
     focus(editor);
   });
 }
+
+/**
+ * return true if node contains all empty space
+ */
+export function isEmptyNode (nodes?: Array<Block | Inline | Text>) {
+  if (!nodes) return true;
+
+  for (let i = 0; i < nodes.length; i++) {
+    const node = nodes[i];
+    if (VOID_BLOCKS.includes(node.nodeType as any)) return false;
+    if (node.nodeType == 'text' && node.value.trim() != '') return false;
+    if (node.nodeType != 'text') return isEmptyNode(node.content);
+  }
+  return true;
+}
+
 
 export async function selectResourceEntityAndInsert(
   sdk,
@@ -151,27 +201,6 @@ function ensureFollowingParagraph(editor: PlateEditor, nodeTypes: BLOCKS[]) {
 
   moveToTheNextChar(editor);
 }
-
-const getLink = (entity) => {
-  return {
-    sys: {
-      id: entity.sys.id,
-      type: 'Link',
-      linkType: entity.sys.type,
-    },
-  };
-};
-
-const createNode = (nodeType, entity) => {
-  return {
-    type: nodeType,
-    data: {
-      target: nodeType === BLOCKS.EMBEDDED_RESOURCE ? entity : getLink(entity),
-    },
-    children: [{ text: '' }],
-    // isVoid: true,
-  };
-};
 
 // TODO: DRY up copied code from HR
 function insertBlock(editor: PlateEditor, nodeType: string, entity) {

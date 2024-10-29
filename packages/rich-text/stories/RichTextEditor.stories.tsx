@@ -100,13 +100,28 @@ const DemoRichTextEditor = () => {
               urn: 'crn:contentful:::content:spaces/space-id/entries/example-entity-urn',
             },
           }
-        : {
+        : fnName === 'selectMultipleAssets'
+          ? [{
             sys: {
               id: 'example-entity-id',
               urn: 'crn:contentful:::content:spaces/space-id/entries/example-entity-urn',
               type,
             },
-          }
+          },
+          {
+            sys: {
+              id: 'example-entity-id',
+              urn: 'crn:contentful:::content:spaces/space-id/entries/example-entity-urn',
+              type,
+            },
+          }]
+          : {
+              sys: {
+                id: 'example-entity-id',
+                urn: 'crn:contentful:::content:spaces/space-id/entries/example-entity-urn',
+                type,
+              },
+            }
       : null; // Simulate cancellation.
   };
 
@@ -181,6 +196,7 @@ const DemoRichTextEditor = () => {
       },
     },
     dialogs: {
+      selectMultipleAssets: newEntitySelectorDummyDialog('selectMultipleAssets', 'Asset'),
       selectSingleAsset: newEntitySelectorDummyDialog('selectSingleAsset', 'Asset'),
       selectSingleEntry: newEntitySelectorDummyDialog('selectSingleEntry', 'Entry'),
       selectSingleResourceEntity: newEntitySelectorDummyDialog(

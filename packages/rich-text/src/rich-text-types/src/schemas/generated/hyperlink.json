@@ -11,16 +11,7 @@
           ]
         },
         "data": {
-          "type": "object",
-          "properties": {
-            "uri": {
-              "type": "string"
-            }
-          },
-          "additionalProperties": false,
-          "required": [
-            "uri"
-          ]
+          "typeof": "function"
         },
         "content": {
           "type": "array",

@@ -1,10 +1,18 @@
-import isHotkey from 'is-hotkey';
-
 import { isBlockSelected } from '../../helpers/editor';
-import { withoutNormalizing, insertNodes, unwrapNodes, isElement } from '../../internal';
-import { KeyboardHandler, HotkeyPlugin, PlateEditor } from '../../internal/types';
+import {
+  withoutNormalizing,
+  insertNodes,
+  unwrapNodes,
+  isElement,
+  PlateEditor
+} from '../../internal';
 import { BLOCKS } from '../../rich-text-types/src';
 import { TrackingPluginActions } from '../Tracking';
+
+export const defaultAccordionBody = {
+  type: BLOCKS.ACCORDION_BODY,
+  children: [{ type: BLOCKS.PARAGRAPH, children: [{ text: '' }] }],
+}
 
 export function toggleAccordion(
   editor: PlateEditor,
@@ -21,7 +29,7 @@ export function toggleAccordion(
     if (!editor.selection) return;
 
     unwrapNodes(editor, {
-      match: (node) => {console.log(node); return isElement(node) && node.type === BLOCKS.ACCORDION},
+      match: (node) => isElement(node) && node.type === BLOCKS.ACCORDION,
       split: false
     });
 
@@ -34,10 +42,7 @@ export function toggleAccordion(
             type: BLOCKS.ACCORDION_TITLE,
             children: [{ text: 'Untitled' }],
           },
-          {
-            type: BLOCKS.PARAGRAPH,
-            children: [{ text: '' }],
-          }
+          {...defaultAccordionBody}
         ],
       };
 
@@ -45,12 +50,3 @@ export function toggleAccordion(
     }
   });
 }
-
-export const onKeyDownToggleAccordion: KeyboardHandler<HotkeyPlugin> = (editor, plugin) => (event) => {
-  const { hotkey } = plugin.options;
-
-  if (hotkey && isHotkey(hotkey, event)) {
-    event.preventDefault();
-    toggleAccordion(editor, editor.tracking.onShortcutAction);
-  }
-};

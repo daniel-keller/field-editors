@@ -4,9 +4,7 @@ import { Form, TextInput } from '@contentful/f36-components';
 import { css } from 'emotion';
 
 import { useContentfulEditor } from '../../../ContentfulEditorProvider';
-import { getNodeEntryFromSelection } from '../../../helpers/editor';
-import { RenderElementProps, setNodes } from '../../../internal';
-import { BLOCKS } from '../../../rich-text-types/src';
+import { findNodePath, RenderElementProps, setNodes, Element } from '../../../internal';
 
 const quote = css({
   margin: '0 0 1.3125rem',
@@ -41,13 +39,13 @@ export function Quote(props: QuoteElementProps) {
 
   const [attribution, setAttribution] = React.useState<string | undefined>(element.data.attribution);
 
-  const changeAttribution = (e) => {
+  const changeAttribution = React.useCallback((e) => {
+    if (!editor) return;
     setAttribution(e.target.value);
-    const [,path] = getNodeEntryFromSelection(editor, BLOCKS.QUOTE);
-
-    const attribution = e.target.value ? e.target.value : undefined;
-    setNodes(editor, {data: {...element.data, attribution }}, { at: path});
-  }
+    const path = findNodePath(editor, element);
+    const att = e.target.value.trim() == '' ? undefined : e.target.value.trim();
+    setNodes(editor, {data: {...element.data, attribution: att}}, {at: path});
+  }, [editor, element]);
 
   return (
     <blockquote {...attributes} className={quote}>
@@ -58,7 +56,7 @@ export function Quote(props: QuoteElementProps) {
       </div>
 
       {children}
-      <Form className={attr} contentEditable='false'>
+      <Form className={attr} contentEditable={false}>
         <TextInput
           name='attribution'
           placeholder='Attribution'

@@ -2,7 +2,7 @@ import { getNodeEntryFromSelection } from '../../../helpers/editor';
 import { setNodes, isElement, getChildren } from '../../../internal';
 import { BLOCKS } from '../../../rich-text-types/src';
 
-export function setColumnStyle(editor, groupPathRef, layout, variant?: string, alignItems?: string) {
+export function setColumnStyle(editor, groupPathRef, layout, style?: string, align?: string) {
   const path = groupPathRef.unref();
   const columnGroup = getNodeEntryFromSelection(editor, BLOCKS.COLUMN_GROUP, path);
 
@@ -17,8 +17,8 @@ export function setColumnStyle(editor, groupPathRef, layout, variant?: string, a
     const width = layout[index] + '%';
 
     const data: any = { width };
-    if (variant) data.variant = variant;
-    if (alignItems) data.alignItems = alignItems;
+    if (style) data.style = style;
+    if (align) data.align = align;
 
     if (!width) return;
     setNodes(

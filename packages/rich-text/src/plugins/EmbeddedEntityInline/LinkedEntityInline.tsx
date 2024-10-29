@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { ButtonGroup, Stack, IconButton, ToggleButton } from '@contentful/f36-components';
+import { ButtonGroup, Stack, Tooltip, IconButton, ToggleButton } from '@contentful/f36-components';
 import { ArrowBackwardIcon, ArrowForwardIcon } from '@contentful/f36-icons';
 import { EntityLink } from '@contentful/field-editor-reference';
 import { css } from 'emotion';
@@ -16,12 +16,16 @@ import { useLinkTracking } from '../links-tracking';
 import { FetchingWrappedAssetCard } from '../shared/FetchingWrappedAssetCard';
 import { LinkedInlineWrapper } from '../shared/LinkedInlineWrapper';
 import { FetchingWrappedInlineEntryCard } from './FetchingWrappedInlineEntryCard';
+import { setRichTextCaption } from '../shared/RichTextCaptionDialog';
+import { TopLevelBlock } from '../../rich-text-types/src';
+import { isEmptyNode } from '../shared/EmbeddedBlockUtil';
 
 type LinkedEntityInlineProps = {
   element: Element & {
     data: {
       target: EntityLink;
       float?: string;
+      caption?: TopLevelBlock[];
     };
   };
   attributes: Pick<RenderElementProps, 'attributes'>;
@@ -44,11 +48,6 @@ const styles = {
     paddingRight: '10px',
     float: 'left',
   }),
-  extraSmallButtons: css({
-    minHeight: 'unset',
-    height: 'fit-content',
-    padding: '0.15rem 0.5rem',
-  }),
 };
 
 function ToggleFloatButtons({
@@ -61,7 +60,6 @@ function ToggleFloatButtons({
   return (
     <ButtonGroup>
       <ToggleButton
-        className={styles.extraSmallButtons}
         isActive={float == 'left'}
         icon={<ArrowBackwardIcon />}
         aria-label="Float Left"
@@ -71,7 +69,6 @@ function ToggleFloatButtons({
         }}
       />
       <ToggleButton
-        className={styles.extraSmallButtons}
         isActive={float == 'right'}
         icon={<ArrowForwardIcon />}
         aria-label="Float Right"
@@ -91,7 +88,8 @@ export function LinkedEntityInline(props: LinkedEntityInlineProps) {
   const editor = useContentfulEditor();
   const sdk = useSdkContext();
   const isDisabled = useReadOnly();
-  const { id: entityId, linkType: entityType } = element.data.target.sys;
+  const { float, caption, target } = element.data;
+  const { id: entityId, linkType: entityType } = target.sys;
 
   const handleEditClick = React.useCallback(() => {
     const openEntity = entityType === 'Asset' ? sdk.navigator.openAsset : sdk.navigator.openEntry;
@@ -104,11 +102,23 @@ export function LinkedEntityInline(props: LinkedEntityInlineProps) {
     removeNodes(editor, { at: pathToElement });
   }, [editor, element]);
 
-  function toggleFloat(float: string) {
+  function toggleFloat(flt: string) {
     if (!editor) return;
     const pathToElement = findNodePath(editor, element);
-    setNodes(editor, { data: { ...element.data, float: float } }, { at: pathToElement });
+    setNodes(editor, { data: { ...element.data, float: flt } }, { at: pathToElement });
   }
+
+  // set caption
+  const setCaption = React.useCallback(async () => {
+    const value = await setRichTextCaption(sdk, caption) as TopLevelBlock[] | undefined;
+    const path = findNodePath(editor, element);
+    const isEmpty = isEmptyNode(value);
+    setNodes(editor, {data: {...element.data, caption: isEmpty ? undefined : value}}, { at: path });
+  }, [editor, element, caption, sdk]);
+
+  const hasCaption = React.useMemo(() => {
+    return !isEmptyNode(caption);
+  }, [caption])
 
   if (entityType === 'Entry') {
     return (
@@ -125,7 +135,7 @@ export function LinkedEntityInline(props: LinkedEntityInlineProps) {
             onEntityFetchComplete={onEntityFetchComplete}
           />
         }
-        link={element.data.target}
+        link={target}
       >
         {children}
       </LinkedInlineWrapper>
@@ -162,11 +172,30 @@ export function LinkedEntityInline(props: LinkedEntityInlineProps) {
         }
       />
       <Stack
-        className={element.data.float == 'left' ? styles.inlineAssetLeft : styles.inlineAssetRight}
+        className={float == 'left' ? styles.inlineAssetLeft : styles.inlineAssetRight}
         flexDirection="column"
         spacing="spacingXs"
       >
-        <ToggleFloatButtons onToggle={toggleFloat} float={element.data.float ?? 'right'} />
+        <Stack
+          flexDirection='row'
+          justifyContent='center'
+          className={css`position: relative; z-index: 1;`}
+        >
+          <ToggleFloatButtons onToggle={toggleFloat} float={float ?? 'right'} />
+          {/* Caption */}
+          <Tooltip placement="right"
+            id="tooltip-caption"
+            content='Edit caption'
+          >
+            <ToggleButton
+              isActive={hasCaption}
+              aria-label='edit caption'
+              size='small'
+              icon={<svg width="24px" height="24px" fill="#000000" viewBox="0 0 256 256" id="Flat" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M128,20A108,108,0,1,0,236,128,108.12217,108.12217,0,0,0,128,20Zm0,192a84,84,0,1,1,84-84A84.0953,84.0953,0,0,1,128,212Zm41.59473-52.79a51.99951,51.99951,0,1,1,0-62.43066,12.0004,12.0004,0,0,1-19.1875,14.418,28.00025,28.00025,0,1,0,0,33.59521A12.00025,12.00025,0,0,1,169.59473,159.21Z"></path> </g></svg>}
+              onToggle={setCaption}
+            />
+          </Tooltip>
+        </Stack>
         <LinkedInlineWrapper
           attributes={attributes}
           card={
@@ -181,7 +210,7 @@ export function LinkedEntityInline(props: LinkedEntityInlineProps) {
               onEntityFetchComplete={onEntityFetchComplete}
             />
           }
-          link={element.data.target}
+          link={target}
         >
           {children}
         </LinkedInlineWrapper>

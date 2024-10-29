@@ -17,6 +17,8 @@ import { ToolbarHrButton } from '../plugins/Hr';
 import { ToolbarHyperlinkButton } from '../plugins/Hyperlink';
 import { ToolbarListButton } from '../plugins/List';
 import { ToolbarBoldButton } from '../plugins/Marks/Bold';
+import { ToolbarAssetGalleryButton } from '../plugins/AssetGallery';
+import { ToolbarIFrameButton } from '../plugins/IFrame';
 import { ToolbarCodeButton, ToolbarDropdownCodeButton } from '../plugins/Marks/Code';
 import { ToolbarItalicButton } from '../plugins/Marks/Italic';
 import {
@@ -37,9 +39,11 @@ import { useSdkContext } from '../SdkProvider';
 import { ButtonRedo } from './components/ButtonRedo';
 import { ButtonUndo } from './components/ButtonUndo';
 import { EmbedEntityWidget } from './components/EmbedEntityWidget';
+import { ToolbarFilloutFormButton } from '../plugins/FilloutForm';
 
 type ToolbarProps = {
   isDisabled?: boolean;
+  restrictedBlocks?: string[];
 };
 
 const styles = {
@@ -118,7 +122,7 @@ const Dropdown = ({ sdk, isDisabled }: { sdk: FieldAppSDK; isDisabled?: boolean 
   );
 };
 
-const Toolbar = ({ isDisabled }: ToolbarProps) => {
+const Toolbar = ({ isDisabled, restrictedBlocks }: ToolbarProps) => {
   const sdk = useSdkContext();
   const editor = useContentfulEditor();
   const canInsertBlocks = !isNodeTypeSelected(editor, BLOCKS.TABLE);
@@ -138,6 +142,12 @@ const Toolbar = ({ isDisabled }: ToolbarProps) => {
   const dropdownItemsAvailable = dropdownMarks.some((mark) => isMarkEnabled(sdk.field, mark));
 
   const shouldShowDropdown = boldItalicUnderlineAvailable && dropdownItemsAvailable;
+
+  const visibleIframe = isNodeTypeEnabled(sdk.field, BLOCKS.IFRAME, restrictedBlocks);
+  const visibleFillout = isNodeTypeEnabled(sdk.field, BLOCKS.FILLOUT_FORM, restrictedBlocks);
+  const visibleColumn = isNodeTypeEnabled(sdk.field, BLOCKS.COLUMN, restrictedBlocks);
+  const visibleAccordion = isNodeTypeEnabled(sdk.field, BLOCKS.ACCORDION, restrictedBlocks);
+  const visibleAssetGallery = isNodeTypeEnabled(sdk.field, BLOCKS.ASSET_GALLERY, restrictedBlocks);
 
   return (
     <Flex
@@ -189,29 +199,35 @@ const Toolbar = ({ isDisabled }: ToolbarProps) => {
 
         <ToolbarAlignButton isDisabled={isDisabled || isAccorionTitleSelected} />
 
-        <ToolbarListButton isDisabled={isDisabled || !canInsertBlocks} />
+        <ToolbarListButton isDisabled={isDisabled || !canInsertBlocks} restrictedBlocks={restrictedBlocks}/>
 
-        {isNodeTypeEnabled(sdk.field, BLOCKS.QUOTE) && (
+        {isNodeTypeEnabled(sdk.field, BLOCKS.QUOTE, restrictedBlocks) && (
           <ToolbarQuoteButton isDisabled={isDisabled || !canInsertBlocks} />
         )}
-        {isNodeTypeEnabled(sdk.field, BLOCKS.HR) && (
+        {isNodeTypeEnabled(sdk.field, BLOCKS.HR, restrictedBlocks) && (
           <ToolbarHrButton isDisabled={isDisabled || !canInsertBlocks} />
         )}
-        {isNodeTypeEnabled(sdk.field, BLOCKS.TABLE) && (
+        {isNodeTypeEnabled(sdk.field, BLOCKS.TABLE, restrictedBlocks) && (
           <ToolbarTableButton isDisabled={shouldDisableTables} />
         )}
 
-        <span className={styles.divider} />
+        {(visibleIframe ||  visibleFillout) && <span className={styles.divider}/>}
 
-        {isNodeTypeEnabled(sdk.field, BLOCKS.COLUMN) && (
-          <ToolbarColumnButton isDisabled={shouldDisableTables} />
-        )}
-        {isNodeTypeEnabled(sdk.field, BLOCKS.ACCORDION) && (
-          <ToolbarAccordionButton isDisabled={shouldDisableTables} />
-        )}
+        {visibleIframe && <ToolbarIFrameButton isDisabled={shouldDisableTables}/>}
+        {visibleFillout && <ToolbarFilloutFormButton isDisabled={shouldDisableTables}/>}
+
+        {(visibleColumn || visibleAccordion || visibleAssetGallery) && <span className={styles.divider} />}
+
+        {visibleColumn && <ToolbarColumnButton isDisabled={shouldDisableTables}/>}
+        {visibleAccordion && <ToolbarAccordionButton isDisabled={shouldDisableTables}/>}
+        {visibleAssetGallery && <ToolbarAssetGalleryButton isDisabled={shouldDisableTables}/>}
       </div>
       <div className={styles.embedActionsWrapper}>
-        <EmbedEntityWidget isDisabled={isDisabled} canInsertBlocks={canInsertBlocks} />
+        <EmbedEntityWidget
+          isDisabled={isDisabled}
+          canInsertBlocks={canInsertBlocks}
+          restrictedBlocks={restrictedBlocks}
+        />
       </div>
     </Flex>
   );

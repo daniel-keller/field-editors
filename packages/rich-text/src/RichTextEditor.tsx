@@ -43,6 +43,7 @@ type ConnectedRichTextProps = {
   onAction?: RichTextTrackingActionHandler;
   onChange?: (doc: Contentful.Document) => unknown;
   restrictedMarks?: string[];
+  restrictedBlocks?: string[];
   minHeight?: string | number;
   maxHeight?: string | number;
   value?: Contentful.Document;
@@ -52,7 +53,7 @@ type ConnectedRichTextProps = {
 };
 
 export const ConnectedRichTextEditor = (props: ConnectedRichTextProps) => {
-  const { sdk, onAction, restrictedMarks } = props;
+  const { sdk, onAction, restrictedMarks, restrictedBlocks } = props;
 
   const id = getContentfulEditorId(sdk);
   const plugins = React.useMemo(
@@ -95,7 +96,7 @@ export const ConnectedRichTextEditor = (props: ConnectedRichTextProps) => {
             >
               {!props.isToolbarHidden && (
                 <StickyToolbarWrapper isDisabled={props.isDisabled}>
-                  <Toolbar isDisabled={props.isDisabled} />
+                  <Toolbar isDisabled={props.isDisabled} restrictedBlocks={restrictedBlocks}/>
                 </StickyToolbarWrapper>
               )}
               <SyncEditorChanges incomingValue={initialValue} onChange={props.onChange} />

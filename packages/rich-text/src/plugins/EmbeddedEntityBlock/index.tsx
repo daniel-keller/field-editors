@@ -15,18 +15,13 @@ const createEmbeddedEntityPlugin =
   (sdk: FieldAppSDK): PlatePlugin => ({
     key: nodeType,
     type: nodeType,
+    isVoid: true,
     isElement: true,
-    // isVoid: true,
-    // isMarkableVoid: true,
     component: LinkedEntityBlock,
     options: { hotkey },
     handlers: {
       onKeyDown: getWithEmbeddedBlockEvents(nodeType, sdk),
     },
-    normalizer: [{
-      // Only allow Paragraphs
-      validChildren: [BLOCKS.PARAGRAPH],
-    }],
     deserializeHtml: {
       rules: [
         {

@@ -5,6 +5,9 @@ import { Block, Inline, ListItemBlock, Text } from './types';
 type EmptyNodeData = {};
 // BLOCKS
 
+type Caption = Paragraph | Hr | Heading1 | Heading2 | Heading3 | Heading4  | Heading5 | Heading6;
+type Body = Paragraph | Hr | OrderedList | UnorderedList | Heading1 | Heading2 | Heading3 | Heading4  | Heading5 | Heading6;
+
 // Heading
 export interface Heading1 extends Block {
   nodeType: BLOCKS.HEADING_1;
@@ -52,7 +55,9 @@ export interface Paragraph extends Block {
 // Quote
 export interface Quote extends Block {
   nodeType: BLOCKS.QUOTE;
-  data: EmptyNodeData;
+  data: {
+    attribution?: string
+  };
   content: Paragraph[];
 }
 // Horizontal rule
@@ -111,19 +116,23 @@ export interface EntryLinkBlock extends Block {
    *
    * @maxItems 0
    */
-  content: Array<Inline | Text>;
+  content: Text[];
 }
 
 export interface AssetLinkBlock extends Block {
   nodeType: BLOCKS.EMBEDDED_ASSET;
   data: {
     target: Link<'Asset'>;
+    focus?: {x: number, y: number};
+    blur?: boolean;
+    fit?: string;
+    caption?: Array<Caption>;
   };
   /**
    *
    * @maxItems 0
    */
-  content: Array<Inline | Text>;
+  content: Text[];
 }
 
 export interface ResourceLinkBlock extends Block {
@@ -135,7 +144,7 @@ export interface ResourceLinkBlock extends Block {
    *
    * @maxItems 0
    */
-  content: Array<Inline | Text>;
+  content: Text[];
 }
 
 // INLINE
@@ -156,7 +165,10 @@ export interface AssetLinkInline extends Inline {
   nodeType: INLINES.EMBEDDED_ASSET;
   data: {
     target: Link<'Asset'>;
+    float?: string;
+    caption?: Array<Caption>;
   };
+
   /**
    *
    * @maxItems 0
@@ -169,6 +181,7 @@ export interface ResourceLinkInline extends Inline {
   data: {
     target: ResourceLink;
   };
+
   /**
    *
    * @maxItems 0
@@ -223,10 +236,12 @@ export interface ColumnGroup extends Block {
   data: {
     layout: number[];
     gap?: string;
+    style?: string;
+    align?: string;
   };
 
   /**
-   * @minItems 2
+   * @minItems 1
    */
   content: Column[];
 }
@@ -277,12 +292,71 @@ export interface AccordionTitle extends Block {
   content: Array<Inline | Text>
 }
 
+export interface AccordionBody extends Block {
+  nodeType: BLOCKS.ACCORDION_BODY;
+  data: EmptyNodeData;
+
+  content: Array<Body>
+}
+
 export interface Accordion extends Block {
   nodeType: BLOCKS.ACCORDION;
-  data: EmptyNodeData;
+  data: {
+    defaultOpen?: boolean;
+  };
+
+  /**
+   * @minItems 2
+   * @maxItems 2
+   */
+  content: Array<AccordionTitle | AccordionBody>;
+}
+
+export interface AssetGallery extends Block {
+  nodeType: BLOCKS.ASSET_GALLERY;
+  data: {
+    title: string;
+    slideshow?: boolean;
+    collapsible?: boolean;
+  };
 
   /**
    * @minItems 1
    */
-  content: Array<AccordionTitle | Paragraph>;
+  // !HACK: should just be Text | AssetLinkBlock but something isn't working
+  content: Array<Text | Block | AssetLinkBlock>;
+}
+
+export interface IFrame extends Block {
+  nodeType: BLOCKS.IFRAME;
+  data: {
+    url: string;
+    width?: string;
+    height?: {
+      xs?: string;
+      sm?: string;
+      md?: string;
+      lg?: string;
+      xl?: string;
+    }
+  };
+  /**
+   *
+   * @maxItems 1
+   * @minItems 1
+   */
+  content: Text[];
+}
+
+export interface FilloutForm extends Block {
+  nodeType: BLOCKS.FILLOUT_FORM;
+  data: {
+    id?: string
+  };
+  /**
+   *
+   * @maxItems 1
+   * @minItems 1
+   */
+  content: Text[];
 }

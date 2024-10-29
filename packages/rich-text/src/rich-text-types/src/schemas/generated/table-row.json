@@ -11,8 +11,7 @@
           ]
         },
         "data": {
-          "type": "object",
-          "properties": {}
+          "typeof": "function"
         },
         "content": {
           "minItems": 1,
@@ -40,16 +39,7 @@
           "type": "string"
         },
         "data": {
-          "type": "object",
-          "properties": {
-            "colspan": {
-              "type": "number"
-            },
-            "rowspan": {
-              "type": "number"
-            }
-          },
-          "additionalProperties": false
+          "typeof": "function"
         },
         "content": {
           "minItems": 1,
@@ -76,8 +66,7 @@
           ]
         },
         "data": {
-          "type": "object",
-          "properties": {}
+          "typeof": "function"
         },
         "content": {
           "type": "array",

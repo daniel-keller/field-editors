@@ -11,8 +11,7 @@
           ]
         },
         "data": {
-          "type": "object",
-          "properties": {}
+          "typeof": "function"
         },
         "content": {
           "type": "array",
@@ -38,8 +37,7 @@
           ]
         },
         "data": {
-          "type": "object",
-          "properties": {}
+          "typeof": "function"
         },
         "content": {
           "type": "array",
@@ -165,7 +163,13 @@
         "table",
         "table-row",
         "table-cell",
-        "table-header-cell"
+        "table-header-cell",
+        "accordion",
+        "accordion-title",
+        "accordion-body",
+        "asset-gallery",
+        "iframe",
+        "fillout"
       ]
     },
     "Inline": {

@@ -172,7 +172,7 @@ export function ColumnFloatingToolbar({ children }: { children: React.ReactNode 
           </Button>
 
           {/* Style */}
-          <ColumnStyleButton setStyle={setStyle} setAlignItems={setVertAlignment}/>
+          <ColumnStyleButton setStyle={setStyle} setAlign={setVertAlignment}/>
 
           <Button size="small" variant="transparent" {...buttonProps}>
             <DeleteIcon variant="negative" />

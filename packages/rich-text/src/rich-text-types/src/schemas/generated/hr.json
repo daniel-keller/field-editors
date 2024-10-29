@@ -11,9 +11,7 @@
           ]
         },
         "data": {
-          "maxItems": 0,
-          "type": "object",
-          "properties": {}
+          "typeof": "function"
         },
         "content": {
           "type": "array",

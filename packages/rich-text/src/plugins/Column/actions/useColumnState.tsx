@@ -29,11 +29,11 @@ export function useColumnState() {
   const setDoubleSideDoubleColumn = () => {
     setNodes(editor, { data: { ...data, layout: [25, 50, 25] } }, { at: columnPath });
   };
-  const setStyle = (style: string) => {
-    setNodes(editor, { data: { ...data, variant: style } }, { at: columnPath });
+  const setStyle = (style?: string) => {
+    setNodes(editor, { data: { ...data, style } }, { at: columnPath });
   };
-  const setVertAlignment = (align: string) => {
-    setNodes(editor, { data: { ...data, alignItems: align } }, { at: columnPath });
+  const setVertAlignment = (align?: string) => {
+    setNodes(editor, { data: { ...data, align } }, { at: columnPath });
   };
 
   return {
